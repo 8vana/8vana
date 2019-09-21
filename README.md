@@ -1,7 +1,17 @@
-# 8vana
-The visualization tool of security incidents like retro games.
+# 8vana: The visualization tool of security incidents like retro games.
 
- ![](./images/8vana_logo_github.jpg)  
+ ![8vana_logo](./images/8vana_logo_github.jpg)  
+
+English page is coming soon!!  
+
+## Overview
+我々は”**セキュリティのインシデントをリアルタイムにレトロゲーム風に可視化**”するツール「**8vana**(ハチバーナ)」を開発した。セキュリティインシデントを可視化するツールは既に幾つも存在するが、「UIが馴染まない」「ハイスペックな動作環境が必要」「費用が高い」などのハードルが往々にしてあり、誰でも気軽に扱えるツールは多くはなかった。  
+
+そこで、我々の8vanaは”**会いに行けるインシデント可視化ツール**”をコンセプトに、UIとエンジンをレトロゲーム風にすることで「**ユーザフレンドリーなUI**」と「**低スペックでも動作可能**」を実現、そして「**OSSとして公開**」することで、誰でも気軽にお使い頂ける多くの工夫を行った。我々は、8vanaを世界中の多くの方々に使っていただき、インシデント・レスポンスの裾野を広げ、**世の中のインシデント対処に少しでも多く貢献する**ことを目指している。  
+
+なお、8vanaはインシデントを可視化できるという特性上、あなたがお使いの**Offensiveツールの挙動や攻撃シミュレーションをも可視化**できる。すなわち、あなたの**ツールデモやCTF、サイバーセキュリティ演習などで8vanaを使う**ことができ、これにより素晴らしいアイキャッチ効果を得ることも可能である。   
+
+ ![8vana_overview](./images/8vana_overview.png)  
 
 ## インストール
 
