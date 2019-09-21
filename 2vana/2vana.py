@@ -163,6 +163,9 @@ class Application:
 
         # Read setting of inputting log.
         self.watch_period = int(config['LogParser']['watch_period'])
+        if self.watch_period < 1:
+            self.utility.print_message(WARNING, 'Watching period is exchanged {}s -> 1s.'.format(str(self.watch_period)))
+            self.watch_period = 1
         converted_log_dir = os.path.join(self.root_path, config['LogParser']['converted_log_path'])
         self.converted_log_path = os.path.join(converted_log_dir, config['LogParser']['converted_log_file'])
         self.read_start_byte = 0

@@ -2,12 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="685b1bfe-9634-4ecd-8e0d-4409987353e6" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/images/8vana_logo_github.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/2vana/config.ini" beforeDir="false" afterPath="$PROJECT_DIR$/2vana/config.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/2vana/2vana.py" beforeDir="false" afterPath="$PROJECT_DIR$/2vana/2vana.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/2vana/assets/wars.pyxel" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/converted_logs/8vana_input.json" beforeDir="false" afterPath="$PROJECT_DIR$/converted_logs/8vana_input.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/origin_logs/gyoithon.log" beforeDir="false" afterPath="$PROJECT_DIR$/origin_logs/gyoithon.log" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -18,11 +15,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="2vana.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="2vana.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/2vana/2vana.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="339">
-              <caret line="721" column="54" selection-start-line="721" selection-start-column="54" selection-end-line="721" selection-end-column="54" />
+            <state relative-caret-position="260">
+              <caret line="167" column="33" lean-forward="true" selection-start-line="167" selection-start-column="33" selection-end-line="167" selection-end-column="33" />
               <folding>
                 <element signature="e#45#54#0" expanded="true" />
               </folding>
@@ -30,11 +27,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="config.ini" pinned="false" current-in-tab="true">
+      <file leaf-file-name="config.ini" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/2vana/config.ini">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="16" column="43" selection-start-line="16" selection-start-column="43" selection-end-line="16" selection-end-column="43" />
+            <state relative-caret-position="323">
+              <caret line="19" column="12" selection-start-line="19" selection-end-line="19" selection-end-column="12" />
             </state>
           </provider>
         </entry>
@@ -58,6 +55,7 @@
       <find>wait_framecount</find>
       <find>192.168.220.133</find>
       <find>logs</find>
+      <find>watch_period</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -70,15 +68,16 @@
         <option value="$PROJECT_DIR$/common/config.ini" />
         <option value="$PROJECT_DIR$/2vana/util.py" />
         <option value="$PROJECT_DIR$/common/Ultimate_Log_parser.py" />
-        <option value="$PROJECT_DIR$/2vana/2vana.py" />
         <option value="$PROJECT_DIR$/2vana/config.ini" />
+        <option value="$PROJECT_DIR$/2vana/2vana.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
-    <option name="x" value="1908" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-145" />
+    <option name="y" value="26" />
     <option name="width" value="1940" />
-    <option name="height" value="1060" />
+    <option name="height" value="1074" />
   </component>
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -194,10 +193,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1912" y="-8" width="1936" height="1056" extended-state="7" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19915701" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18440185" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.2391775" />
@@ -340,16 +339,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/2vana/2vana.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="339">
-          <caret line="721" column="54" selection-start-line="721" selection-start-column="54" selection-end-line="721" selection-end-column="54" />
-          <folding>
-            <element signature="e#45#54#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
@@ -359,8 +348,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/2vana/config.ini">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" column="43" selection-start-line="16" selection-start-column="43" selection-end-line="16" selection-end-column="43" />
+        <state relative-caret-position="323">
+          <caret line="19" column="12" selection-start-line="19" selection-end-line="19" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/2vana/2vana.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="260">
+          <caret line="167" column="33" lean-forward="true" selection-start-line="167" selection-start-column="33" selection-end-line="167" selection-end-column="33" />
+          <folding>
+            <element signature="e#45#54#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
