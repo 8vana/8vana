@@ -125,9 +125,10 @@ actionに `zeijyaku` と設定されている場合、モノリスを開いて10
 
 ### 利用方法
 
-png_convert.pyを利用する場合は、以下のように利用する。
+png_convert.pyを利用する場合は、以下のように利用する。※png_convert.py自体はcommonディレクトリ配下に配置されている。
 
 ```
+$ cd common/png_convert
 $ python3 png_convert.py <input file> <output file>
 ```
 
