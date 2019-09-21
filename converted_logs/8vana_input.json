@@ -1,0 +1,83 @@
+[
+    {
+        "phase": "Discovery",
+        "attack": "Unknown",
+        "time": 1558406843.0,
+        "from": "GyoiThon",
+        "to": "",
+        "note": {
+            "option": "Get target information",
+            "CVE": false
+        }
+    }
+ , {
+    "phase": "Discovery",
+    "attack": "Unknown",
+    "time": 1558406843.0,
+    "from": "GyoiThon",
+    "to": "",
+    "note": {
+        "option": "Get target information",
+        "CVE": false
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "Cloud Checker",
+    "time": 1558406905.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Analyze cloud service.",
+        "CVE": false
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "Cloud Checker",
+    "time": 1558406940.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Check AWS IP range.",
+        "CVE": false
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "Cloud Checker",
+    "time": 1558406980.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "[Out] Check AWS IP range.",
+        "CVE": false
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "Cloud Checker",
+    "time": 1558406992.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Check Azure IP range.",
+        "CVE": false
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "Cloud Checker",
+    "time": 1558407012.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Check Azure IP range",
+        "CVE": false
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "Cloud Checker",
+    "time": 1558407042.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Check GCP IP range",
+        "CVE": false
+    }
+}]

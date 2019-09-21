@@ -7,9 +7,8 @@ import datetime
 import random
 import pyxel
 import configparser
-from util import Utility
-from modules.Hachi_Actor import Actor
-from modules.Hachi_LogExtractor import Parser
+from .util import Utility
+from .modules.Hachi_Actor import Actor
 
 
 # Type of printing.
@@ -195,7 +194,6 @@ class Application:
         self.create_instance()
         self.Bullet = []
         self.Laser = []
-        self.parser = Parser(utility)
 
         # Get timestamp.
         self.timestamp = time.mktime(datetime.datetime.now().utctimetuple())
@@ -633,11 +631,7 @@ class Application:
         # Control Actor's action.
         log_contents = ''
         if pyxel.frame_count % self.utility.wait_framecount(1) == 0:
-            # Get log per 1 second.
-            log_contents = self.parser.watch(self.read_start_byte)
-        if len(log_contents) != 0:
-            self.read_start_byte += len(log_contents)
-            parsed_log_list = self.parser.parse_log(log_contents)
+            # TODO: JSONから読み込む方式に変更すること。
 
             # Decide Actor's action using log.
             for log_info in parsed_log_list:
