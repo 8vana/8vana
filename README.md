@@ -22,7 +22,7 @@ English page is coming soon!!
 Pyxelをインストールするには、事前にPythonのバージョン3.7以降をインストールしておく必要があります。  
 
 ```
-$ pip install -U pyxel
+$ pip3 install -U pyxel
 ```
 
 ### 8vanaのインストール
@@ -33,7 +33,7 @@ $ git clone https://github.com/8vana/8vana.git
 ```
 
 ## 使用方法
-8vanaは、外部の監視ツールが出力した（セキュリティ・インシデントを含む）ログファイルを8vana形式のログに正規化する「**Ultimate Log Parser**」と「**レンダリングエンジン**」から構成されます。また、レンダリングエンジンは、現在2つのレンダリングモード（1vana、2vana）が実装済みです。  
+8vanaは、外部の監視ツールが出力した（セキュリティ・インシデントを含む）ログファイルを8vana形式のログに正規化する「**Ultimate Log Parser**」と、「**レンダリングエンジン**」から構成されます。また、レンダリングエンジンは、現在2つのレンダリングモード（1vana、2vana）が実装済みです。  
 
  * Ultimate Log Parser  
  外部監視ツールが出力したログを8vanaに最適化されたログ形式に正規化するパーサー。  
@@ -469,7 +469,7 @@ $ python3 png_convert.py <input file> <output file>
  * Windows 10 (Home Edition)  
  * CPU: Intel(R) Core(TM) i7-6500U 2.50GHz  
  * Memory: 16.0GB  
- * Python 3.6.8  
+ * Python 3.7  
  * pyxel 1.0.2  
 
 ## ライセンス
