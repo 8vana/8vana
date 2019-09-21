@@ -51,7 +51,7 @@ optional arguments:
 基本的な設定は以下の通りです。詳細は `env.py` を参照してください。
 
 ### NPUT_LOG
-1vanaが参照するログファイルを指定します。デフォルトは `parser/log.json` です。
+1vanaが参照するログファイルを指定します。デフォルトは `converted_logs/8vana_input.json` です。
 
 ### LOG_POLLING_TIME
 ログのアップデートを確認するタイミングを秒単位で指定します。デフォルトは `5` 秒です。
@@ -133,7 +133,7 @@ $ python3 png_convert.py <input file> <output file>
 
 ## パーサーについて
 
-1vanaが読み込むファイルは `env.py` の `INPUT_LOG` で指定します。デフォルトは `parser/log.json` を読み込みます。
+1vanaが読み込むファイルは `env.py` の `INPUT_LOG` で指定します。デフォルトは `converted_logs/8vana_input.json` を読み込みます。
 
 以下は、8vanaが読み込み可能なJSON形式の正規化されたログの例です。
 
@@ -178,7 +178,7 @@ $ python3 png_convert.py <input file> <output file>
 指定可能な値は以下の２つであり、文字列で指定します。この種別によって表示されるアイコンが変化します。
 
 * attack
-* discover
+* discover または discovery
 
 ### attack
 
