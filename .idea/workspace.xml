@@ -3,9 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="685b1bfe-9634-4ecd-8e0d-4409987353e6" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/2vana/2vana.py" beforeDir="false" afterPath="$PROJECT_DIR$/2vana/2vana.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/2vana/config.ini" beforeDir="false" afterPath="$PROJECT_DIR$/2vana/config.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/Ultimate_Log_parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/common/Ultimate_Log_parser.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/converted_logs/8vana_input.json" beforeDir="false" afterPath="$PROJECT_DIR$/converted_logs/8vana_input.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/origin_logs/gyoithon.log" beforeDir="false" afterPath="$PROJECT_DIR$/origin_logs/gyoithon.log" afterDir="false" />
     </list>
@@ -17,39 +15,24 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="2vana.py" pinned="false" current-in-tab="true">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="2vana.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/2vana/2vana.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="612" column="49" lean-forward="true" selection-start-line="612" selection-start-column="49" selection-end-line="612" selection-end-column="49" />
+            <state relative-caret-position="339">
+              <caret line="721" column="54" selection-start-line="721" selection-start-column="54" selection-end-line="721" selection-end-column="54" />
               <folding>
                 <element signature="e#45#54#0" expanded="true" />
-                <element signature="e#1445#1795#0" />
-                <element signature="e#1830#2053#0" />
-                <element signature="e#2094#2729#0" />
-                <element signature="e#2780#3239#0" />
-                <element signature="e#6513#7295#0" />
-                <element signature="e#7384#12444#0" />
-                <element signature="e#12503#12780#0" />
-                <element signature="e#12842#13742#0" />
-                <element signature="e#13800#14442#0" />
-                <element signature="e#14500#15177#0" />
-                <element signature="e#15233#16026#0" />
-                <element signature="e#16092#16830#0" />
-                <element signature="e#16890#18682#0" />
-                <element signature="e#18922#19123#0" />
-                <element signature="e#19171#19748#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="config.ini" pinned="false" current-in-tab="false">
+      <file leaf-file-name="config.ini" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/2vana/config.ini">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="233">
-              <caret line="20" column="35" lean-forward="true" selection-start-line="20" selection-start-column="35" selection-end-line="20" selection-end-column="35" />
+            <state relative-caret-position="272">
+              <caret line="16" column="43" selection-start-line="16" selection-start-column="43" selection-end-line="16" selection-end-column="43" />
             </state>
           </provider>
         </entry>
@@ -57,20 +40,11 @@
       <file leaf-file-name="Ultimate_Log_parser.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/common/Ultimate_Log_parser.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="355">
-              <caret line="129" column="48" lean-forward="true" selection-start-line="129" selection-start-column="12" selection-end-line="129" selection-end-column="48" />
+            <state relative-caret-position="2193">
+              <caret line="129" column="48" selection-start-line="129" selection-start-column="12" selection-end-line="129" selection-end-column="48" />
               <folding>
                 <element signature="e#45#54#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="util.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/2vana/util.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="292">
-              <caret line="137" column="62" selection-start-line="137" selection-start-column="62" selection-end-line="137" selection-end-column="62" />
             </state>
           </provider>
         </entry>
@@ -81,6 +55,7 @@
     <findStrings>
       <find>wait_framecount</find>
       <find>192.168.220.133</find>
+      <find>logs</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -93,8 +68,8 @@
         <option value="$PROJECT_DIR$/common/config.ini" />
         <option value="$PROJECT_DIR$/2vana/util.py" />
         <option value="$PROJECT_DIR$/common/Ultimate_Log_parser.py" />
-        <option value="$PROJECT_DIR$/2vana/config.ini" />
         <option value="$PROJECT_DIR$/2vana/2vana.py" />
+        <option value="$PROJECT_DIR$/2vana/config.ini" />
       </list>
     </option>
   </component>
@@ -134,6 +109,9 @@
       </pane>
       <pane id="Scope" />
     </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -217,23 +195,23 @@
     <frame x="1912" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19915701" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19915701" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.2391775" />
-      <window_info anchor="bottom" id="Version Control" />
-      <window_info anchor="bottom" id="Python Console" weight="0.32900432" />
+      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.2391775" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Python Console" order="7" weight="0.32900432" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Terminal" weight="0.32900432" />
+      <window_info anchor="bottom" id="Terminal" order="7" weight="0.32900432" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.33982685" />
-      <window_info id="Favorites" side_tool="true" />
-      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" />
     </layout>
   </component>
   <component name="UnknownFeatures">
@@ -250,18 +228,40 @@
           <line>99</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../GyoiThon/util.py</url>
+          <line>47</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="17" />
+      <option name="time" value="18" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/index.md">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
+    <entry file="file://$PROJECT_DIR$/2vana/2vana.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
+        <state relative-caret-position="12257">
+          <caret line="721" column="54" lean-forward="true" selection-start-line="721" selection-start-column="54" selection-end-line="721" selection-end-column="54" />
+          <folding>
+            <element signature="e#45#54#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/2vana/config.ini">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="20" column="35" lean-forward="true" selection-start-line="20" selection-start-column="35" selection-end-line="20" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/common/Ultimate_Log_parser.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2193">
+          <caret line="129" column="48" lean-forward="true" selection-start-line="129" selection-start-column="12" selection-end-line="129" selection-end-column="48" />
+          <folding>
+            <element signature="e#45#54#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -314,17 +314,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/2vana/config.ini">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="233">
-          <caret line="20" column="35" lean-forward="true" selection-start-line="20" selection-start-column="35" selection-end-line="20" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/common/Ultimate_Log_parser.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="355">
-          <caret line="129" column="48" lean-forward="true" selection-start-line="129" selection-start-column="12" selection-end-line="129" selection-end-column="48" />
+        <state relative-caret-position="2193">
+          <caret line="129" column="48" selection-start-line="129" selection-start-column="12" selection-end-line="129" selection-end-column="48" />
           <folding>
             <element signature="e#45#54#0" expanded="true" />
           </folding>
@@ -338,28 +331,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/../GyoiThon/util.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="173">
+          <caret line="40" column="23" lean-forward="true" selection-start-line="143" selection-start-column="39" selection-end-line="143" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/2vana/2vana.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="612" column="49" lean-forward="true" selection-start-line="612" selection-start-column="49" selection-end-line="612" selection-end-column="49" />
+        <state relative-caret-position="339">
+          <caret line="721" column="54" selection-start-line="721" selection-start-column="54" selection-end-line="721" selection-end-column="54" />
           <folding>
             <element signature="e#45#54#0" expanded="true" />
-            <element signature="e#1445#1795#0" />
-            <element signature="e#1830#2053#0" />
-            <element signature="e#2094#2729#0" />
-            <element signature="e#2780#3239#0" />
-            <element signature="e#6513#7295#0" />
-            <element signature="e#7384#12444#0" />
-            <element signature="e#12503#12780#0" />
-            <element signature="e#12842#13742#0" />
-            <element signature="e#13800#14442#0" />
-            <element signature="e#14500#15177#0" />
-            <element signature="e#15233#16026#0" />
-            <element signature="e#16092#16830#0" />
-            <element signature="e#16890#18682#0" />
-            <element signature="e#18922#19123#0" />
-            <element signature="e#19171#19748#0" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/2vana/config.ini">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="16" column="43" selection-start-line="16" selection-start-column="43" selection-end-line="16" selection-end-column="43" />
         </state>
       </provider>
     </entry>

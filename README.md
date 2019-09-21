@@ -1,6 +1,7 @@
 # 8vana
-
 The visualization tool of security incidents like retro games.
+
+ ![](./images/8vana_logo_github.jpg)  
 
 ## インストール
 
@@ -208,5 +209,3 @@ epoch秒（数値）でイベント発生時刻を設定します。
 
 
 ### 2vanaにおけるnoteの扱い
-
-
