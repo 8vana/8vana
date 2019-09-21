@@ -45,12 +45,17 @@ $ git clone https://github.com/8vana/8vana.git
  某戦車RPG風のUIを備え、攻撃者と監視対象システムが相対しているような雰囲気を
 醸し出すレンダリングモード。  
 
-以下、各機能の使用方法を解説します。  
+8vanaを使用する場合は、以下の手順で各機能を起動します。  
+
+ 1. Ultimate Log Parserの起動  
+ 2. レンダリングエンジン（1vana or 2vana）の起動  
+
+以下、各機能の使用方法と機能を解説します。  
 
 ### Ultimate Log Parser
 #### Ultimate Log Parserを起動する
 ```
-$ cd 8vana
+$ cd 8vana/common
 $ python3 ./Ultimate_Log_parser.py
 ```
 
@@ -102,7 +107,7 @@ Ultimate Log Parserが起動されると、予め設定された監視対象ロ�
 * Attack
 * Discover または Discovery
 
-監視対象ログからイベント種別を抽出する場合は、Ultimate Log Parserの設定ファイル（`config.ini`）の下記項目を監視対象ログの形式に合わせて変更します。  
+監視対象ログからイベント種別を抽出する場合は、Ultimate Log Parserの設定ファイル（`common/config.ini`）の下記項目を監視対象ログの形式に合わせて変更します。  
 
 ```
 [LogParser]
@@ -121,7 +126,7 @@ INFO,2019/09/21 16:46:32 [Out] Phase:[Discovery], Action:[Nmap], Note:[Get targe
 ##### attack
 具体的なイベントの事象を表します。  
 
-監視対象ログから具体的なイベントの事象を抽出する場合は、Ultimate Log Parserの設定ファイル（`config.ini`）の下記項目を監視対象ログの形式に合わせて変更します。  
+監視対象ログから具体的なイベントの事象を抽出する場合は、Ultimate Log Parserの設定ファイル（`common/config.ini`）の下記項目を監視対象ログの形式に合わせて変更します。  
 
 ```
 [LogParser]
@@ -140,7 +145,7 @@ INFO,2019/09/21 16:46:32 [Out] Phase:[Discovery], Action:[Nmap], Note:[Get targe
 ##### time
 イベント発生時刻（epoch秒）を表します。  
 
-監視対象ログからイベント発生時刻を抽出する場合は、Ultimate Log Parserの設定ファイル（`config.ini`）の下記項目を監視対象ログの形式に合わせて変更します。  
+監視対象ログからイベント発生時刻を抽出する場合は、Ultimate Log Parserの設定ファイル（`common/config.ini`）の下記項目を監視対象ログの形式に合わせて変更します。  
 
 ```
 [LogParser]
@@ -159,7 +164,7 @@ INFO,2019/09/21 16:46:32 [Out] Phase:[Discovery], Action:[Nmap], Note:[Get targe
 ##### from
 接続元のIPv4アドレスまたはホスト名を文字列で表します。  
 
-監視対象ログから接続元を抽出する場合は、Ultimate Log Parserの設定ファイル（`config.ini`）の下記項目を監視対象ログの形式に合わせて変更します。  
+監視対象ログから接続元を抽出する場合は、Ultimate Log Parserの設定ファイル（`common/config.ini`）の下記項目を監視対象ログの形式に合わせて変更します。  
 
 ```
 [LogParser]
@@ -178,7 +183,7 @@ INFO,2019/09/21 16:46:32 [Out] Phase:[Discovery], Action:[Nmap], Note:[Get targe
 ##### to
 接続先のIPv4アドレスまたはホスト名で表します。  
 
-監視対象ログから接続先を抽出する場合は、Ultimate Log Parserの設定ファイル（`config.ini`）の下記項目を監視対象ログの形式に合わせて変更します。  
+監視対象ログから接続先を抽出する場合は、Ultimate Log Parserの設定ファイル（`common/config.ini`）の下記項目を監視対象ログの形式に合わせて変更します。  
 
 ```
 [LogParser]
@@ -197,7 +202,7 @@ INFO,2019/09/21 16:46:32 [Out] Phase:[Discovery], Action:[Nmap], Note:[Get targe
 ##### note
 イベントの付加情報を表します。  
 
-監視対象ログから付加情報を抽出する場合は、Ultimate Log Parserの設定ファイル（`config.ini`）の下記項目を監視対象ログの形式に合わせて変更します。  
+監視対象ログから付加情報を抽出する場合は、Ultimate Log Parserの設定ファイル（`common/config.ini`）の下記項目を監視対象ログの形式に合わせて変更します。  
 
 ```
 [LogParser]
@@ -460,9 +465,15 @@ $ cd common/png_convert
 $ python3 png_convert.py <input file> <output file>
 ```
 
-## 動作環境
+## 動作確認済み環境
+ * Windows 10 (Home Edition)  
+ * CPU: Intel(R) Core(TM) i7-6500U 2.50GHz  
+ * Memory: 16.0GB  
+ * Python 3.6.8  
+ * pyxel 1.0.2  
 
 ## ライセンス
 [Apache License 2.0](LICENSE)  
 
 ## 連絡先
+hachi8vana@gmail.com  
