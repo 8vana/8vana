@@ -1,0 +1,347 @@
+import re
+import pyxel
+import env
+from datetime import datetime
+
+
+class Draw:
+
+    def draw_object(
+        self, idx, x, y,  reset=False, cls_color=env.BLACK, line_color=env.BLACK, bg_color=env.DARK_GRAY, font_color=env.WHITE
+        ):
+
+        if(reset):
+            pyxel.cls(cls_color)  # reset display color
+
+        s = '%03d' % (idx)
+        obj_map = {
+            "line_x1" : x - 1,
+            "line_y1" : y - 1,
+            "line_x2" : x + env.NETMAP_OBJ_WIDTH  + 0,
+            "line_y2" : y + env.NETMAP_OBJ_HEIGHT + 1,
+            "fill_x1" : x - 0,
+            "fill_y1" : y - 0,
+            "fill_x2" : x + env.NETMAP_OBJ_WIDTH  - 1,
+            "fill_y2" : y + env.NETMAP_OBJ_HEIGHT + 0,
+            "str_x"   : x + env.NETMAP_OBJ_MARGIN_RIGHT,
+            "str_y"   : y + env.NETMAP_OBJ_MARGIN_RIGHT
+        }
+        pyxel.rect(obj_map["line_x1"], obj_map["line_y1"], obj_map["line_x2"], obj_map["line_y2"], line_color)
+        pyxel.rect(obj_map["fill_x1"], obj_map["fill_y1"], obj_map["fill_x2"], obj_map["fill_y2"], bg_color)
+        pyxel.text(obj_map["str_x"],   obj_map["str_y"], s, font_color)  # x, y, string, color
+        return True
+
+
+    def draw_wide_object(
+        self, idx, x, y, xx=0, yy=0, reset=False, cls_color=env.BLACK, line_color=env.BLACK, bg_color=env.DARK_GRAY, font_color=env.WHITE
+        ):
+
+        if(reset):
+            pyxel.cls(cls_color)  # reset display color
+
+        s = '%03d' % (idx)
+        obj_map = {
+            "line_x1" : x - 1 - (xx),
+            "line_y1" : y - 1 - (yy),
+            "line_x2" : x + env.NETMAP_OBJ_WIDTH  + 0 + (xx),
+            "line_y2" : y + env.NETMAP_OBJ_HEIGHT + 1 + (yy),
+            "fill_x1" : x - 0 - (xx),
+            "fill_y1" : y - 0 - (yy),
+            "fill_x2" : x + env.NETMAP_OBJ_WIDTH  - 1 + (xx),
+            "fill_y2" : y + env.NETMAP_OBJ_HEIGHT + 0 + (yy),
+            "str_x"   : x + env.NETMAP_OBJ_MARGIN_RIGHT,
+            "str_y"   : y + env.NETMAP_OBJ_MARGIN_RIGHT
+        }
+        pyxel.rect(obj_map["line_x1"], obj_map["line_y1"], obj_map["line_x2"], obj_map["line_y2"], line_color)
+        pyxel.rect(obj_map["fill_x1"], obj_map["fill_y1"], obj_map["fill_x2"], obj_map["fill_y2"], bg_color)
+        pyxel.text(obj_map["str_x"],   obj_map["str_y"], s, font_color)  # x, y, string, color
+        return True
+
+
+    def draw_fill_object(self, str, x, y, xx=0, yy=0, reset=False, cls_color=env.BLACK, line_color=env.BLACK, bg_color=env.DARK_GRAY, font_color=env.WHITE):
+
+        if(reset):
+            pyxel.cls(0)  # reset display color
+
+        obj_map = {
+            "line_x1" : x - 1 - (xx),
+            "line_y1" : y - 1 - (yy),
+            "line_x2" : x + env.NETMAP_OBJ_WIDTH  + 0 + (xx),
+            "line_y2" : y + env.NETMAP_OBJ_HEIGHT + 1 + (yy),
+            "fill_x1" : x - 0 - (xx),
+            "fill_y1" : y - 0 - (yy),
+            "fill_x2" : x + env.NETMAP_OBJ_WIDTH  - 1 + (xx),
+            "fill_y2" : y + env.NETMAP_OBJ_HEIGHT + 0 + (yy),
+            "str_x"   : x + env.NETMAP_OBJ_MARGIN_RIGHT,
+            "str_y"   : y + env.NETMAP_OBJ_MARGIN_RIGHT
+        }
+        pyxel.rect(obj_map["line_x1"], obj_map["line_y1"], obj_map["line_x2"], obj_map["line_y2"], line_color)
+        pyxel.rect(obj_map["fill_x1"], obj_map["fill_y1"], obj_map["fill_x2"], obj_map["fill_y2"], bg_color)
+        pyxel.text(obj_map["str_x"],   obj_map["str_y"], str, font_color)  # x, y, string, color
+        return True
+
+
+    #self.netmap_att["offset_x"], self.netmap_att["offset_y"], [ self.netmap_att["list_obj_maps"], [self.netmap_att["selected_obj"]] ]
+    def draw_network_object(self, att, l, node_status={}):
+        offset_x      = att["offset_x"]
+        offset_y      = att["offset_y"]
+        list_obj_maps = att["list_obj_maps"]
+        obj_list      = l
+        x = env.NETMAP_BASE_X + offset_x
+        y = env.NETMAP_BASE_Y + env.NETMAP_OBJ_MARGIN_TOP + offset_y
+        
+        #print("x: " + str(offset_x) + ", y:" + str(offset_y))
+
+        for obj_map in list_obj_maps:
+            event_time = 0
+            addr = list(map(str, att["addr_obj"]))
+            addr.append(str(obj_map[0]))
+            
+            if(
+                att["netmap"] == env.WORLDMAP and
+                node_status.get(addr[0]) != None
+                ):
+                status = node_status[addr[0]]["status"]
+                if(status["update"] > event_time):
+                    event_time = status["update"]
+            elif(
+                att["netmap"] == env.CLASS_A and
+                node_status.get(addr[0]) != None and
+                node_status.get(addr[0]).get(addr[1]) != None
+                ):
+                status = node_status[addr[0]][addr[1]]["status"]
+                if(status["update"] > event_time):
+                    event_time = status["update"]
+            elif(
+                att["netmap"] == env.CLASS_B and
+                node_status.get(addr[0]) != None and
+                node_status.get(addr[0]).get(addr[1]) != None and
+                node_status.get(addr[0]).get(addr[1]).get(addr[2]) != None
+                ):
+                status = node_status[addr[0]][addr[1]][addr[2]]["status"]
+                if(status["update"] > event_time):
+                    event_time = status["update"]
+            elif(
+                att["netmap"] == env.CLASS_C and
+                node_status.get(addr[0]) != None and
+                node_status.get(addr[0]).get(addr[1]) != None and
+                node_status.get(addr[0]).get(addr[1]).get(addr[2]) != None and
+                node_status.get(addr[0]).get(addr[1]).get(addr[2]).get(addr[3]) != None
+                ):
+                status = node_status[addr[0]][addr[1]][addr[2]][addr[3]]["status"]
+                if(status["update"] > event_time):
+                    event_time = status["update"]
+
+
+            if(obj_map[0] != 0 and obj_map[0] % 16 == 0):
+                y += env.NETMAP_OBJ_MARGIN_DOWN
+                x = env.NETMAP_BASE_X + offset_x
+            
+            x = (env.NETMAP_BASE_X + (obj_map[0] % 16) * env.NETMAP_OBJ_WIDTH) + \
+                env.NETMAP_OBJ_MARGIN_RIGHT + offset_x
+            
+            (line_color, bg_color, font_color) = (obj_map[5], obj_map[6], obj_map[7])
+
+            # ノードのイベント発生状態からバックグラウンドカラーを選択する
+            delta = att["now"] - event_time
+            if(   delta >= (0 - env.VISUALIZE_TIME_RANGE) and delta <= 60 * 1):
+                bg_color = env.LEVEL_1
+            elif( delta >  60 * 1  and delta <= 60 * 5):
+                bg_color = env.LEVEL_2
+            elif( delta >  60 * 5  and delta <= 60 * 10):
+                bg_color = env.LEVEL_3
+            elif( delta >  60 * 10 and delta <= 60 * 30):
+                bg_color = env.LEVEL_4
+            elif( delta >  60 * 30 and delta <= 60 * 60):
+                bg_color = env.LEVEL_5
+            
+
+            if(len(obj_list) > 0):
+                if(obj_map[0] in obj_list):
+                    print("selected_obj: " + str(obj_map[0]))
+                    self.draw_object(obj_map[0], x, y, False, line_color, line_color, bg_color, font_color)
+            else:
+                self.draw_object(obj_map[0], obj_map[1], obj_map[2], False, line_color, line_color, bg_color, font_color)
+
+            # time.sleep(5) # dame zettai!
+        return True
+
+
+
+    def draw_network_address(self, status):
+        # draw network address
+        stratum      = status["netmap"]
+        selected_obj = status["selected_obj"]
+        addr_obj     = status["addr_obj"]
+        
+        reset = '[push R key to Reset]'
+        network = ''
+        netmask    = '/'
+        if stratum == 0:
+            network = '0.0.0.0'
+            netmask += str(0)
+        elif stratum == 1:
+            network = '.'.join(map(str,addr_obj)) + '.0.0.0'
+            netmask += str(8)
+        elif stratum == 2:
+            network = '.'.join(map(str,addr_obj)) + '.0.0'
+            netmask += str(16)
+        elif stratum == 3:
+            network = '.'.join(map(str,addr_obj)) + '.0'
+            netmask += str(24)
+        elif stratum == 4:
+            network = '.'.join(map(str,addr_obj))
+            netmask += str(32)
+        
+        #print("[*] Stratum: " + str(stratum))
+        
+        address = network + netmask
+
+        pyxel.text(
+            env.NETMAP_BASE_X,
+            env.NETMAP_BASE_Y,
+            address,
+            7)  # x, y, string, color
+
+        if(selected_obj > -1):
+            pyxel.text(
+                env.NETMAP_BASE_X + env.NETMAP_OBJ_MARGIN_RIGHT +
+                (len(address) * 5),
+                env.NETMAP_BASE_Y,
+                str(selected_obj),
+                14)  # x, y, string, color
+
+        pyxel.text(
+            (pyxel.width - (len(reset) * env.CHAR_WIDTH) -
+            env.NETMAP_OBJ_MARGIN_RIGHT),
+            env.NETMAP_BASE_Y,
+            reset,
+            9)  # x, y, string, color
+        return True
+
+
+
+    def draw_time(self, time, color=env.WHITE):
+        # draw time
+        epoch = "{:.1f}".format(time)
+        dt    = datetime.fromtimestamp(int(time))
+        date  = "{0:%Y-%m-%d %H:%M:%S}".format(dt)
+        time  = "{} {}".format(date, epoch)
+        pyxel.text(
+            env.TIME_AREA_X,
+            env.TIME_AREA_Y,
+            time,
+            color)  # x, y, string, color
+        return True
+
+
+    def draw_target_log_time(self, target1, target2, color=env.WHITE, count=0, offset=env.CHAR_HEIGHT):
+        # draw strings on log area
+        dt1   = datetime.fromtimestamp(target1["time"])
+        time1 = "{0:%Y-%m-%d %H:%M:%S}".format(dt1)
+        time2 = ""
+
+        if(type(target2) is dict and target1 != target2):
+            #print(target2)
+            dt2   = datetime.fromtimestamp(target2["time"])
+            time2 = " -> {0:%Y-%m-%d %H:%M:%S}".format(dt2)
+
+        time = time1 + time2
+        pyxel.text(
+            env.LOG_AREA_X,
+            env.LOG_AREA_Y + (offset * count),
+            time,
+            color)  # x, y, string, color
+        return (count + 1)
+
+
+    def draw_target_log_next(self, color=env.WHITE, count=0, offset=env.CHAR_HEIGHT):
+        # draw click to next sign on log area
+        pyxel.text(
+            env.LOG_AREA_X,
+            env.LOG_AREA_Y + (offset * count),
+            "**** click to next page ****",
+            color)  # x, y, string, color
+        return (count + 1)
+
+
+    def draw_target_log(self, target, note="", color=env.GREEN, count=0, offset=env.CHAR_HEIGHT):
+        # draw strings on log area
+        log = ""
+        if(type(target) is dict):
+            #dt   = datetime.fromtimestamp(target["time"])
+            #time = "{0:%Y-%m-%d %H:%M:%S}".format(dt)
+            #time = "{0:%H:%M:%S}".format(dt)
+            #log  = "{}:{}:{}: {} > {} {}".format(time, target["phase"], target["attack"], target["from"], target["to"], note)
+            log  = "{}: {} > {} {}".format(target["attack"], target["from"], target["to"], note)
+        elif(type(target) is str):
+            log = target
+
+        pyxel.text(
+            env.LOG_AREA_X,
+            env.LOG_AREA_Y + (offset * count),
+            log,
+            color)  # x, y, string, color
+        return (count + 1)
+
+    def draw_monolith_log_area(self, color=env.LIGHT_GRAY):
+        pyxel.rect(env.MONOLITH_X1, env.MONOLITH_Y1, env.MONOLITH_X2, env.MONOLITH_Y2, color)
+        return True
+
+
+    def draw_monolith_log_time(self, target1, target2, color=env.WHITE, count=0, offset=env.CHAR_HEIGHT):
+        # draw strings on log area
+        dt1   = datetime.fromtimestamp(target1["time"])
+        time1 = "{0:%Y-%m-%d %H:%M:%S}".format(dt1)
+        time2 = ""
+
+        if(type(target2) is dict and target1 != target2):
+            #print(target2)
+            dt2   = datetime.fromtimestamp(target2["time"])
+            time2 = " -> {0:%Y-%m-%d %H:%M:%S}".format(dt2)
+
+        time = time1 + time2
+        pyxel.text(
+            env.MONOLITH_X1 + env.MONOLITH_MARGIN_LEFT,
+            env.MONOLITH_Y1 + env.MONOLITH_MARGIN_TOP + (offset * count),
+            time,
+            color)  # x, y, string, color
+        return (count + 1)
+
+
+    def draw_monolith_log_next(self, page, page_max, color=env.BROWN, count=0, offset=env.CHAR_HEIGHT):
+        # draw click to next sign on log area
+        line       = "<<    <- {0:>4}/{1:<4} ->    >>".format(page+1, page_max)
+        line_width = len(line) * env.CHAR_WIDTH
+        margin     = (env.MONOLITH_X2 - env.MONOLITH_X1 - line_width)
+        pyxel.text(
+            env.MONOLITH_X1 + env.MONOLITH_MARGIN_LEFT + margin,
+            env.MONOLITH_Y2 - env.MONOLITH_MARGIN_TOP - offset,
+            line,
+            color)  # x, y, string, color
+        #print("draw_monolith_log_next:margin:%d:line_width:%d" % (margin, line_width))
+        return (margin, line_width)
+
+
+    def draw_monolith_log(self, log, color=env.DARK_GRAY, count=0, margin_left=0, offset=env.CHAR_HEIGHT):
+        # draw strings on monolith area
+        pyxel.text(
+            env.MONOLITH_X1 + env.MONOLITH_MARGIN_LEFT + margin_left,
+            env.MONOLITH_Y1 + env.MONOLITH_MARGIN_TOP  + (offset * count),
+            log,
+            color)  # x, y, string, color
+        return (count + 1)
+
+
+    def draw_bullets(self, bullets, icon):
+        xy = icon["world"].get_center_position()
+        x  = xy[0]
+        y  = xy[1]
+        for bullet in bullets:
+            pyxel.line(x, y, bullet["state"].x2, bullet["state"].y2, bullet["line_color"])
+            bullet["icon"].pmove_abs(bullet["state"].x - (bullet["icon"].width / 2), bullet["state"].y - (bullet["icon"].height / 2))
+            if(bullet["line_color"] == env.RED):
+                icon["mono"].pmove_abs(bullet["state"].x2, (bullet["state"].y2 - 6))
+                icon["fire"].pmove_abs(bullet["state"].x2, bullet["state"].y2)
+        return True
+

@@ -1,0 +1,8 @@
+/__pycache__/
+/pyxel_examples/
+.*
+*.*~
+/pyxel/
+/pyxel.git/
+!.gitignore
+/images/ignore/
