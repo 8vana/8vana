@@ -4,11 +4,13 @@ import os
 import math
 import time
 import datetime
+import codecs
 import random
+import json
 import pyxel
 import configparser
-from .util import Utility
-from .modules.Hachi_Actor import Actor
+from util import Utility
+from modules.Hachi_Actor import Actor
 
 
 # Type of printing.
@@ -136,6 +138,7 @@ class Application:
         self.utility = utility
         self.file_name = os.path.basename(__file__)
         self.full_path = os.path.dirname(os.path.abspath(__file__))
+        self.root_path = os.path.join(self.full_path, '..')
 
         # Read config.ini.
         config = configparser.ConfigParser()
@@ -157,6 +160,13 @@ class Application:
             self.utility.print_message(WARNING, 'Too many targets. Clipped : {} -> {}'.format(len(self.targets), 8))
             self.targets = self.targets[0:8]
         self.Target = []
+
+        # Read setting of inputting log.
+        self.watch_period = int(config['LogParser']['watch_period'])
+        converted_log_dir = os.path.join(self.root_path, config['LogParser']['converted_log_path'])
+        self.converted_log_path = os.path.join(converted_log_dir, config['LogParser']['converted_log_file'])
+        self.read_start_byte = 0
+        self.last_log_loading_time = 0
 
         # Create Display Text instance.
         self.DisplayText = DisplayText()
@@ -581,6 +591,33 @@ class Application:
                 return target_id, 'Target'
         return -1, None
 
+    # Get object (attacker, target) index.
+    def get_object_index(self, target_list, obj_name):
+        get_index = None
+        for idx, target_name in enumerate(target_list):
+            if target_name == obj_name:
+                get_index = idx
+                break
+        return get_index
+
+    # Monitor log files.
+    def watch(self, read_start_byte):
+        # Check updated date of target log.
+        if os.path.exists(self.converted_log_path):
+            # Read log.
+            with codecs.open(self.converted_log_path, mode='r', encoding='utf-8') as fin:
+                fin.seek(read_start_byte)
+                raw_content = fin.read()
+                if raw_content == '':
+                    return []
+                elif raw_content.startswith(','):
+                    raw_content = raw_content[:0] + '[' + raw_content[1:]
+                self.read_start_byte += len(raw_content)
+                content = json.loads(raw_content)
+            return content
+        else:
+            return []
+
     # Update drawing.
     def update(self):
         # Quit.
@@ -630,14 +667,16 @@ class Application:
 
         # Control Actor's action.
         log_contents = ''
-        if pyxel.frame_count % self.utility.wait_framecount(1) == 0:
-            # TODO: JSONから読み込む方式に変更すること。
+        if pyxel.frame_count % self.utility.wait_framecount(self.watch_period) == 0:
+            log_contents = self.watch(self.read_start_byte)
 
             # Decide Actor's action using log.
-            for log_info in parsed_log_list:
+            for log_info in log_contents:
                 # Select attacker and target.
-                a_idx = self.parser.get_object_index(self.attackers, log_info['From'])
-                t_idx = self.parser.get_object_index(self.targets, log_info['To'])
+                a_idx = self.get_object_index(self.attackers, log_info['from'])
+                t_idx = self.get_object_index(self.targets, log_info['to'])
+                if a_idx is None or t_idx is None:
+                    continue
 
                 # Calculate degree from attacker to target.
                 x = self.Attacker[a_idx].center_x - self.Target[t_idx].center_x
@@ -647,15 +686,15 @@ class Application:
                 # Attacker's attacking animation.
                 self.Attacker[a_idx].origin_framecount = pyxel.frame_count
                 action_idx = 0
-                if log_info['Phase'] == 'Attack':
+                if log_info['phase'] == 'Attack':
                     action_idx = random.randint(0, 2)
                 else:
                     action_idx = 3
 
                 # Make message.
-                msg = '{} executes {} to Dest={}'.format(log_info['From'],
-                                                         log_info['Action'],
-                                                         log_info['To'])
+                msg = '{} executes {} to Dest={}'.format(log_info['from'],
+                                                         log_info['attack'],
+                                                         log_info['to'])
 
                 # Shoot bullet.
                 if action_idx == 0:

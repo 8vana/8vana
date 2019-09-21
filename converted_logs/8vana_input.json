@@ -80,4 +80,304 @@
         "option": "Check GCP IP range",
         "CVE": false
     }
+} , {
+    "phase": "Discovery",
+    "attack": "Cloud Checker",
+    "time": 1558407065.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Execute : nslookup -q=TXT _cloud-netblocks.googleusercontent.com 8.8.8.8",
+        "CVE": false
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "Cloud Checker",
+    "time": 1558407112.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Execute : nslookup -q=TXT _cloud-netblocks1.googleusercontent.com 8.8.8.8",
+        "CVE": false
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "Cloud Checker",
+    "time": 1558407140.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Execute : nslookup -q=TXT _cloud-netblocks2.googleusercontent.com 8.8.8.8",
+        "CVE": false
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "Cloud Checker",
+    "time": 1558407140.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Execute : nslookup -q=TXT _cloud-netblocks3.googleusercontent.com 8.8.8.8",
+        "CVE": false
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "Cloud Checker",
+    "time": 1558407140.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Execute : nslookup -q=TXT _cloud-netblocks4.googleusercontent.com 8.8.8.8",
+        "CVE": false
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "Cloud Checker",
+    "time": 1558407141.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Execute : nslookup -q=TXT _cloud-netblocks5.googleusercontent.com 8.8.8.8",
+        "CVE": false
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "Cloud Checker",
+    "time": 1558407155.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Check GCP IP range.",
+        "CVE": false
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "Cloud Checker",
+    "time": 1558407160.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Analyze cloud service.",
+        "CVE": false
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "Censys",
+    "time": 1558407189.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Search Censys",
+        "CVE": false
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "Censys",
+    "time": 1558407244.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Search Censys",
+        "CVE": false
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "Web Crawling",
+    "time": 1558407272.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Run spider",
+        "CVE": false
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "Web Crawling",
+    "time": 1558407295.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Execute spider : scrapy runspider -s CLOSESPIDER_TIMEOUT=300 -s CLOSESPIDER_ITEMCOUNT=50 -s CLOSESPIDER_PAGECOUNT=50 -s CLOSESPIDER_ERRORCOUNT=0 C:\\Users\\i.takaesu\\Documents\\GitHub\\GyoiThon\\modules\\Gyoi_Spider.py -a target_url=http://192.168.220.133:80/ -a allow_domain=192.168.220.133 -a concurrent=1 -a depth_limit=2 -a delay=10.0 -a store_path=logs\\192.168.220.133_80\\http_192.168.220.133_80_crawl_response_20190521115443.log -a proxy_server= -a user_agent=\"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:63.0) Gecko/20100101 Firefox/63.0\" -a encoding=ASCII -o logs\\192.168.220.133_80\\20190521115443_crawl_result.json.",
+        "CVE": false
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "CVE Explorer",
+    "time": 1558407721.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Explore CVE information",
+        "CVE": false
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "CVE Explorer",
+    "time": 1558407743.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Find CVE-2015-4599 for php/php *.",
+        "CVE": true
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "CVE Explorer",
+    "time": 1558407758.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Find CVE-2015-4600 for php/php *.",
+        "CVE": true
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "CVE Explorer",
+    "time": 1558407773.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Find CVE-2015-4601 for php/php *.",
+        "CVE": true
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "CVE Explorer",
+    "time": 1558407773.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Find CVE-2015-8994 for php/php 5.2.4.",
+        "CVE": true
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "CVE Explorer",
+    "time": 1558407773.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Find CVE-2016-7478 for php/php 5.2.4.",
+        "CVE": true
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "CVE Explorer",
+    "time": 1558407773.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Find CVE-2008-0599 for php/php 5.2.4.",
+        "CVE": true
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "CVE Explorer",
+    "time": 1558407774.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Find CVE-2005-0109 for ubuntu/ubuntu_linux *.",
+        "CVE": true
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "CVE Explorer",
+    "time": 1558407774.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Find CVE-2004-0882 for ubuntu/ubuntu_linux *.",
+        "CVE": true
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "CVE Explorer",
+    "time": 1558407774.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Find CVE-2004-0888 for ubuntu/ubuntu_linux *.",
+        "CVE": true
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "CVE Explorer",
+    "time": 1558407774.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Find CVE-2016-4975 for apache/http_server 2.2.8.",
+        "CVE": true
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "CVE Explorer",
+    "time": 1558407774.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Find CVE-2010-0425 for apache/http_server 2.2.8.",
+        "CVE": true
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "CVE Explorer",
+    "time": 1558407774.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Find CVE-2011-3192 for apache/http_server 2.2.8.",
+        "CVE": true
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "CVE Explorer",
+    "time": 1558407775.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Find CVE-2005-3773 for */joomla *.",
+        "CVE": true
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "CVE Explorer",
+    "time": 1558407775.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Find CVE-2006-0303 for */joomla *.",
+        "CVE": true
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "CVE Explorer",
+    "time": 1558407775.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Find CVE-2006-1047 for */joomla *.",
+        "CVE": true
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "CVE Explorer",
+    "time": 1558407793.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Explore CVE information",
+        "CVE": false
+    }
+} , {
+    "phase": "Discovery",
+    "attack": "Comment Check",
+    "time": 1558407806.0,
+    "from": "GyoiThon",
+    "to": "192.168.220.133",
+    "note": {
+        "option": "Check unnecessary comments.",
+        "CVE": false
+    }
 }]

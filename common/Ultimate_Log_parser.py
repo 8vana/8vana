@@ -52,15 +52,6 @@ class Parser:
             print('Reading config.ini is failure : {}'.format(e))
             sys.exit(1)
 
-    # Get object (attacker, target) index.
-    def get_object_index(self, target_list, obj_name):
-        get_index = 0
-        for idx, target_name in enumerate(target_list):
-            if target_name == obj_name:
-                get_index = idx
-                break
-        return get_index
-
     # Add log to JSON file.
     def append_json_to_file(self, data):
         with codecs.open(self.converted_log_path, mode='a', encoding=self.default_charset) as fout:
