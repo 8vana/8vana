@@ -33,9 +33,8 @@ class Parser:
             self.watch_period = int(config['Common']['watch_period'])
             if self.watch_period < 5:
                 print('Watching period is too short. >= 5[s]')
-                sys.exit(0)
+                self.watch_period = 5
 
-            self.max_read_size = int(config['LogParser']['max_read_size'])
             origin_log_dir = os.path.join(self.root_path, config['LogParser']['origin_log_path'])
             self.origin_log_path = os.path.join(origin_log_dir, config['LogParser']['origin_log_file'])
             converted_log_dir = os.path.join(self.root_path, config['LogParser']['converted_log_path'])

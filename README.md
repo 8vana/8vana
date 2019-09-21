@@ -33,17 +33,230 @@ $ git clone https://github.com/8vana/8vana.git
 ```
 
 ## 使用方法
-8vanaには、現在**2つのレンダリングモード**が存在します。  
-※最終的には8つのレンダリングモードを実装予定です。  
+8vanaは、外部の監視ツールが出力した（セキュリティ・インシデントを含む）ログファイルを8vana形式のログに正規化する「**Ultimate Log Parser**」と「**レンダリングエンジン**」から構成されます。また、レンダリングエンジンは、現在2つのレンダリングモード（1vana、2vana）が実装済みです。  
+
+ * Ultimate Log Parser  
+ 外部監視ツールが出力したログを8vanaに最適化されたログ形式に正規化するパーサー。  
 
  * 1vana  
- 計算され尽くしたUIを備え、サイバーな雰囲気を感じることができるモード。  
+ 計算され尽くしたUIを備え、サイバーな雰囲気を感じることができるレンダリングモード。  
 
  * 2vana  
  某戦車RPG風のUIを備え、攻撃者と監視対象システムが相対しているような雰囲気を
-醸し出すモード。  
+醸し出すレンダリングモード。  
 
-以下、各レンダリングモード毎に使用方法を解説します。  
+以下、各機能の使用方法を解説します。  
+
+### Ultimate Log Parser
+#### Ultimate Log Parserを起動する
+```
+$ cd 8vana
+$ python3 ./Ultimate_Log_parser.py
+```
+
+Ultimate Log Parserが起動されると、予め設定された監視対象ログを定期的にチェックし、ログを8vanaに最適化されたJSON形式に変換して新たに保存します。以下にJSON形式に変換されたログの一例を示します。  
+
+```
+[
+  {
+    "phase": "Discover",
+    "attack": "nmap",
+    "time": 1555784308.0,
+    "from": "172.31.200.91",
+    "to": "172.31.101.30",
+    "note": {
+      "option": "",
+      "CVE": [
+        "N/A"
+      ]
+    }
+  },
+  {
+    "phase": "Discover",
+    "attack": "nmap",
+    "time": 1555784308.0,
+    "from": "172.31.200.91",
+    "to": "172.31.101.30",
+    "note": {
+      "option": "",
+      "CVE": [
+        "N/A"
+      ]
+    }
+  }
+]
+```
+
+本ログの要素、`phase`, `attack`, `time`, `from`, `to`, `note` は必須項目であり、監視対象ログにこれらの情報が含まれない場合は、イベントを描画することができません。  
+
+ただし、`note` の使われ方は各モードに依存するため、各モード毎の説明を確認してください。  
+
+各必須項目に設定可能な設定値は以下の通りです。  
+あなたが、独自ツールを8vanaで可視化する場合は、このルールに則ってパーサーを作成する必要があります。  
+
+#### 各要素の解説および取得方法
+##### phase
+イベントの種別（偵察行為or攻撃行為）を表します。  
+現在指定可能な値は以下の２つであり、文字列で指定します。この種別によって描画されるアイコンが変化します。  
+
+* Attack
+* Discover または Discovery
+
+監視対象ログからイベント種別を抽出する場合は、Ultimate Log Parserの設定ファイル（`config.ini`）の下記項目を監視対象ログの形式に合わせて変更します。  
+
+```
+[LogParser]
+...snip...
+phase_regex        : \sPhase\:\[(.*)\],\sAction\:
+...snip...
+```
+
+正規表現で指定します。  
+監視対象ログが下記形式であった場合、イベント種別として「`Discovery`」が取得されます。  
+
+```
+INFO,2019/09/21 16:46:32 [Out] Phase:[Discovery], Action:[Nmap], Note:[Get target information], To:[192.168.220.129], From:[GyoiThon] [gyoithon.py]
+```
+
+##### attack
+具体的なイベントの事象を表します。  
+
+監視対象ログから具体的なイベントの事象を抽出する場合は、Ultimate Log Parserの設定ファイル（`config.ini`）の下記項目を監視対象ログの形式に合わせて変更します。  
+
+```
+[LogParser]
+...snip...
+action_regex       : \sAction\:\[(.*)\],\sNote\:
+...snip...
+```
+
+正規表現で指定します。  
+監視対象ログが下記形式であった場合、イベント事象として「`Nmap`」が取得されます。  
+
+```
+INFO,2019/09/21 16:46:32 [Out] Phase:[Discovery], Action:[Nmap], Note:[Get target information], To:[192.168.220.129], From:[GyoiThon] [gyoithon.py]
+```
+
+##### time
+イベント発生時刻（epoch秒）を表します。  
+
+監視対象ログからイベント発生時刻を抽出する場合は、Ultimate Log Parserの設定ファイル（`config.ini`）の下記項目を監視対象ログの形式に合わせて変更します。  
+
+```
+[LogParser]
+...snip...
+date_regex         : ,(\d{4}/\d{2}/\d{2}\s\d{2}\:\d{2}\:\d{2})
+...snip...
+```
+
+正規表現で指定します。  
+監視対象ログが下記形式であった場合、イベント発生時刻として「`1569051992.0`」が取得されます（`2019/09/21 16:46:32`をepoch秒に変換した値）。  
+
+```
+INFO,2019/09/21 16:46:32 [Out] Phase:[Discovery], Action:[Nmap], Note:[Get target information], To:[192.168.220.129], From:[GyoiThon] [gyoithon.py]
+```
+
+##### from
+接続元のIPv4アドレスまたはホスト名を文字列で表します。  
+
+監視対象ログから接続元を抽出する場合は、Ultimate Log Parserの設定ファイル（`config.ini`）の下記項目を監視対象ログの形式に合わせて変更します。  
+
+```
+[LogParser]
+...snip...
+from_regex         : \sFrom\:\[(.*)\]\s\[.*\][\r\n]
+...snip...
+```
+
+正規表現で指定します。  
+監視対象ログが下記形式であった場合、接続元として「`GyoiThon`」が取得されます。  
+
+```
+INFO,2019/09/21 16:46:32 [Out] Phase:[Discovery], Action:[Nmap], Note:[Get target information], To:[192.168.220.129], From:[GyoiThon] [gyoithon.py]
+```
+
+##### to
+接続先のIPv4アドレスまたはホスト名で表します。  
+
+監視対象ログから接続先を抽出する場合は、Ultimate Log Parserの設定ファイル（`config.ini`）の下記項目を監視対象ログの形式に合わせて変更します。  
+
+```
+[LogParser]
+...snip...
+to_regex           : \sTo\:\[(.*)\],\sFrom\:
+...snip...
+```
+
+正規表現で指定します。  
+監視対象ログが下記形式であった場合、接続先として「`192.168.220.129`」が取得されます。  
+
+```
+INFO,2019/09/21 16:46:32 [Out] Phase:[Discovery], Action:[Nmap], Note:[Get target information], To:[192.168.220.129], From:[GyoiThon] [gyoithon.py]
+```
+
+##### note
+イベントの付加情報を表します。  
+
+監視対象ログから付加情報を抽出する場合は、Ultimate Log Parserの設定ファイル（`config.ini`）の下記項目を監視対象ログの形式に合わせて変更します。  
+
+```
+[LogParser]
+...snip...
+note_regex         : \sNote\:\[(.*)\],\sTo\:
+...snip...
+```
+
+正規表現で指定します。  
+監視対象ログが下記形式であった場合、付加情報として「`Get target information`」が取得されます。  
+
+```
+INFO,2019/09/21 16:46:32 [Out] Phase:[Discovery], Action:[Nmap], Note:[Get target information], To:[192.168.220.129], From:[GyoiThon] [gyoithon.py]
+```
+
+ * 1vanaにおけるnoteの扱い  
+ 1vanaでは、noteに次の情報を載せることができます。  
+   * option  
+   * CVE  
+
+ `option` には、補足的な説明事項をテキストデータとして格納できます。  
+ `CVE` には、関連するCVE番号を文字列として配列で保持することができます。  
+
+#### その他の設定
+Ultimate Log Parserのログの監視時間間隔やログのPathを変更したい場合は、以下の値を変更します。  
+
+```
+[Common]
+...snip...
+watch_period    : 5
+...snip...
+
+[LogParser]
+origin_log_path    : origin_logs
+origin_log_file    : gyoithon.log
+converted_log_path : converted_logs
+converted_log_file : 8vana_input.json
+...snip...
+```
+
+ * `watch_period`  
+ ログの監視時間間隔（単位は秒）です。  
+ 最小設定値は`5秒`となり、これより小さい値に設定した場合は強制的に5秒に設定されます。  
+
+ * `origin_log_path`  
+ 監視対象ログのPathです。  
+ デフォルトは `origin_logs` です。連携する外部ツールに合わせて変更します。  
+
+ * `converted_log_file`  
+ 監視対象ログのファイル名です。  
+ デフォルトは `gyoithon.log` です。連携する外部ツールに合わせて変更します。  
+
+ * `converted_log_path`  
+ 8vana形式のJSONファイルを出力するPathです。  
+ デフォルトは `converted_logs` です。  
+
+ * `converted_log_file`  
+ 8vana形式のJSONファイル名です。  
+ デフォルトは `8vana_input.json` です。  
 
 ### 1vana
  ![](./images/1vana_explanation.png)    
@@ -145,7 +358,6 @@ iconには定義済みのicon名を指定することができます。
 actionに `zeijyaku` と設定されている場合、モノリスを開いて10フレーム経過してから20フレーム経過すまでの間に脆弱のアイコンが表示されます。  
 現時点では、演出用に利用できるのみの実験的な機能になっている。  
 
-
 ### 2vana
  ![](./images/2vana_explanation.png)    
 
@@ -205,14 +417,15 @@ IPアドレスまたは任意のホスト名を設定することができます
  アットマーク区切りで各ホストを記述します。  
  ```
  [Target]
- targets   : 192.168.184.155@192.168.184.129@192.168.184.134
+ targets   : 192.168.184.155@192.168.184.129@Metasploitable3
  ```
 
 なお、監視対象ホストの数は**最大で12台**です。  
 13台以上のホストを記述した場合、**13台目以降は無視**されますのでご注意ください。  
 
-##### ログ監視関連の設定
-2vanaは、Ultimate Log Parserが作成したJSON形式のログファイルからイベントを取り込み描画します。ログの監視時間間隔やログのPathをしたい場合は、以下の設定を変更します。  
+##### ログ関連の設定
+2vanaは、ログパーサーが生成したJSON形式のログファイルからイベントを取り込み、描画します。  
+ログの監視時間間隔やログのPathを変更したい場合は、以下の値を変更します。  
 
 ```
 [LogParser]
@@ -227,12 +440,13 @@ converted_log_file : 8vana_input.json
 
  * `converted_log_path`  
  監視対象ログのPathです。  
- 通常は8vanaのルート直下にある`converted_logs`ディレクトリを使用するため、変更することはないでしょう。  
+ デフォルトは `converted_logs` です。  
 
  * `converted_log_file`  
  監視対象ログのファイル名です。  
- 通常はUltimate Log Parserが生成する`8vana_input.json`を参照するため、変更することはないでしょう。  
+ デフォルトは `8vana_input.json` です。  
 
+### ユーティリティーツール
 #### 画像コンバーター「png_convert.py」
 24bitのpngファイルをindexed colorのpng画像に変換するスクリプトです。  
 Pyxelのデフォルト設定で利用可能な16色のうちから、最も近い色を検出して置換することができます。  
@@ -246,79 +460,9 @@ $ cd common/png_convert
 $ python3 png_convert.py <input file> <output file>
 ```
 
-## パーサーについて
+## 動作環境
 
-1vanaが読み込むファイルは `env.py` の `INPUT_LOG` で指定します。デフォルトは `converted_logs/8vana_input.json` を読み込みます。
+## ライセンス
+[Apache License 2.0](LICENSE)  
 
-以下は、8vanaが読み込み可能なJSON形式の正規化されたログの例です。
-
-```
-[
-  {
-    "phase": "discover",
-    "attack": "nmap",
-    "time": 1555784308.0,
-    "from": "172.31.200.91",
-    "to": "172.31.101.30",
-    "note": {
-      "option": "",
-      "CVE": [
-        "N/A"
-      ]
-    }
-  },
-  {
-    "phase": "discover",
-    "attack": "nmap",
-    "time": 1555784308.0,
-    "from": "172.31.200.91",
-    "to": "172.31.101.30",
-    "note": {
-      "option": "",
-      "CVE": [
-        "N/A"
-      ]
-    }
-  }
-]
-```
-
-
-`phase`, `attack`, `time`, `from`, `to`, `note` は必須項目です。ただし、`note` の使われ方は各モードに依存するため、各モード毎の説明を確認してください。
-
-各必須項目に設定可能な設定値は以下の通り。あなたが、独自ツールを8vanaで可視化する場合は、このルールに則ってパーサーを作る必要があります。
-
-### phase
-
-指定可能な値は以下の２つであり、文字列で指定します。この種別によって表示されるアイコンが変化します。
-
-* attack
-* discover または discovery
-
-### attack
-
-任意の名前を文字列で設定します。
-
-### time
-
-epoch秒（数値）でイベント発生時刻を設定します。
-
-### from
-
-接続元のIPv4アドレスを文字列で指定します。
-
-### to
-
-接続先のIPv4アドレスを文字列で指定します。
-
-### 1vanaにおけるnoteの扱い
-
-1vanaでは、noteに次の情報を載せることができます。
-
-* option
-* CVE
-
-`option` には、補足的な説明事項をテキストデータとして格納できます。`CVE` には、関連するCVE番号を文字列として配列で保持することができます。
-
-
-### 2vanaにおけるnoteの扱い
+## 連絡先
