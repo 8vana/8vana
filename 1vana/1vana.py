@@ -10,20 +10,21 @@ import math
 import re
 
 import env
-import util
-import actor
-import actor_state
-import digest
 import draw
-import fonts
+from modules.actor       import Actor
+from modules.actor_state import ActorState
+from modules.fonts       import Fonts
+from modules.digest      import Digest
+from modules.util        import Util
+
 
 
 WINDOW_WIDTH  = 255
 WINDOW_HEIGHT = 255
 
 d      = draw.Draw()
-util   = util.Util()
-digest = digest.Digest()
+util   = Util()
+digest = Digest(env.LOG_HASH_ALGO)
 
 # 引数の処理
 parser = argparse.ArgumentParser(description='1vana')
@@ -90,53 +91,53 @@ class App:
         }
 
         # ImageLoaderを利用したアイコンの登録
-        self.icon["world"] = actor.Actor(env.NETMAP_BASE_X, 175)
+        self.icon["world"] = Actor(env.NETMAP_BASE_X, 175)
         self.icon["world"].set_size(32, 32)
         self.icon["world"].imageload(self.dir + "images/internet1_32.png")
         self.icon["world"].imageload(self.dir + "images/internet2_32.png")
 
-        self.icon["arrow"] = actor.Actor()
+        self.icon["arrow"] = Actor()
         self.icon["arrow"].imageload(self.dir + "images/arrow1_up_8.png")
 
-        self.icon["search"] = actor.Actor()
+        self.icon["search"] = Actor()
         self.icon["search"].set_size(8,8)
         self.icon["search"].imageload(self.dir + "images/search3_8.png")
         self.icon["search"].imageload(self.dir + "images/search2_8.png")
 
 
-        self.icon["log1"] = actor.Actor()
+        self.icon["log1"] = Actor()
         self.icon["log1"].set_size(8,8)
         self.icon["log1"].imageload(self.dir + "images/logarea1_8_16.png")
-        self.icon["log2"] = actor.Actor()
+        self.icon["log2"] = Actor()
         self.icon["log2"].set_size(8,8)
         self.icon["log2"].imageload(self.dir + "images/logarea2_8_16.png")
-        self.icon["log3"] = actor.Actor()
+        self.icon["log3"] = Actor()
         self.icon["log3"].set_size(8,8)
         self.icon["log3"].imageload(self.dir + "images/logarea3_8_16.png")
-        self.icon["log4"] = actor.Actor()
+        self.icon["log4"] = Actor()
         self.icon["log4"].set_size(8,8)
         self.icon["log4"].imageload(self.dir + "images/logarea4_8_16.png")
 
-        self.icon["logvl"] = actor.Actor()
+        self.icon["logvl"] = Actor()
         self.icon["logvl"].set_size(8,8)
         self.icon["logvl"].imageload(self.dir + "images/logarea_vl_8_16.png")
-        self.icon["logvr"] = actor.Actor()
+        self.icon["logvr"] = Actor()
         self.icon["logvr"].set_size(8,8)
         self.icon["logvr"].imageload(self.dir + "images/logarea_vr_8_16.png")
 
-        self.icon["loght"] = actor.Actor()
+        self.icon["loght"] = Actor()
         self.icon["loght"].set_size(8,8)
         self.icon["loght"].imageload(self.dir + "images/logarea_ht_8_16.png")
-        self.icon["loghb"] = actor.Actor()
+        self.icon["loghb"] = Actor()
         self.icon["loghb"].set_size(8,8)
         self.icon["loghb"].imageload(self.dir + "images/logarea_hb_8_16.png")
 
 
-        self.icon["fire"] = actor.Actor()
+        self.icon["fire"] = Actor()
         self.icon["fire"].imageload(self.dir + "images/fire1_8_16.png")
         self.icon["fire"].imageload(self.dir + "images/fire2_8_16.png")
 
-        self.icon["mono"] = actor.Actor()
+        self.icon["mono"] = Actor()
         self.icon["mono"].imageload(self.dir + "images/mono/01.png")
         self.icon["mono"].imageload(self.dir + "images/mono/02.png")
         self.icon["mono"].imageload(self.dir + "images/mono/03.png")
@@ -149,13 +150,13 @@ class App:
         self.icon["mono"].imageload(self.dir + "images/mono/10.png")
         self.icon["mono"].imageload(self.dir + "images/mono/11.png")
 
-        self.icon["unknown"] = actor.Actor(96, 24)
+        self.icon["unknown"] = Actor(96, 24)
         self.icon["unknown"].imageload(self.dir + "images/unknown64.png")
 
-        self.icon["debian"] = actor.Actor(96, 24)
+        self.icon["debian"] = Actor(96, 24)
         self.icon["debian"].imageload(self.dir + "images/debian64.png")
 
-        self.icon["zeijyaku255"] = actor.Actor()
+        self.icon["zeijyaku255"] = Actor()
         self.icon["zeijyaku255"].imageload(self.dir + "images/zei255-red.png")
 
 
@@ -943,7 +944,7 @@ class App:
                     src_xy     = self.icon["world"].get_center_position()
                     obj_map    = list_obj_maps[target_obj]
                     dst_xy     = [obj_map[1] + (env.NETMAP_OBJ_WIDTH / 2), obj_map[2] + (env.NETMAP_OBJ_HEIGHT / 2)]
-                    astate     = actor_state.ActorState(src_xy[0], src_xy[1], dst_xy[0], dst_xy[1], target_obj, obj_map)
+                    astate     = ActorState(src_xy[0], src_xy[1], dst_xy[0], dst_xy[1], target_obj, obj_map)
 
                     if(self.re_discover.match(t["phase"])):
                         bullets.append({ "icon": self.icon["search"], "state": astate, "line_color": env.YELLOW })
