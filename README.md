@@ -351,7 +351,7 @@ iconには定義済みのicon名を指定することができます。
 同一の名前のiconに複数の画像を追加すると、デフォルトでは8フレーム単位で切り替わります。  
 
 ```
-        self.actor["<任意の名前>"] = actor.Actor()
+        self.actor["<任意の名前>"] = Actor()
         self.actor["<任意の名前>"].imageload("<ファイルパス>")
         self.actor["<任意の名前>"].imageload("<ファイルパス>")
 ```
