@@ -10,20 +10,42 @@ import math
 import re
 
 import env
-import draw
 from modules.actor       import Actor
 from modules.actor_state import ActorState
 from modules.fonts       import Fonts
 from modules.digest      import Digest
 from modules.util        import Util
+from modules.bullet      import Bullet
+from modules.tlog        import Targetlog
+from modules.monolith    import Monolith
+from modules.netmap      import Netmap
 
 
 
 WINDOW_WIDTH  = 255
 WINDOW_HEIGHT = 255
 
-d      = draw.Draw()
-util   = Util()
+util         = Util()
+draw_bullets = Bullet(env.TIME_AREA_X, env.TIME_AREA_Y)
+draw_tlog    = Targetlog(env.LOG_AREA_X, env.LOG_AREA_Y, env.CHAR_WIDTH, env.CHAR_HEIGHT)
+draw_mono    = Monolith(
+            env.MONOLITH_X1, env.MONOLITH_Y1,
+            env.MONOLITH_X2, env.MONOLITH_Y2,
+            env.MONOLITH_MARGIN_LEFT, env.MONOLITH_MARGIN_TOP,
+            env.MONOLITH_TITLE_LENGTH,
+            env.MONOLITH_PREVIOUS_AMOUNT1, env.MONOLITH_PREVIOUS_AMOUNT2,
+            env.MONOLITH_NEXT_AMOUNT1, env.MONOLITH_NEXT_AMOUNT2,
+            env.TIME_AREA_X, env.TIME_AREA_Y,
+            env.CHAR_WIDTH, env.CHAR_HEIGHT)
+draw_netmap  = Netmap(
+            env.VISUALIZE_TIME_RANGE,
+            env.CHAR_WIDTH, env.CHAR_HEIGHT,
+            env.LEVEL_1, env.LEVEL_2, env.LEVEL_3, env.LEVEL_4, env.LEVEL_5,
+            env.WORLDMAP, env.CLASS_A, env.CLASS_B, env.CLASS_C, env.HOST,
+            env.NETMAP_OBJ_WIDTH, env.NETMAP_OBJ_HEIGHT,
+            env.NETMAP_OBJ_MARGIN_TOP, env.NETMAP_OBJ_MARGIN_DOWN, env.NETMAP_OBJ_MARGIN_RIGHT,
+            env.NETMAP_BASE_X, env.NETMAP_BASE_Y,
+            env.WINDOW_WIDTH, env.WINDOW_HEIGHT)
 digest = Digest(env.LOG_HASH_ALGO)
 
 # 引数の処理
@@ -522,17 +544,17 @@ class App:
         # select class A or class B address
         if self.netmap_att["netmap"] == env.WORLDMAP or self.netmap_att["netmap"] == env.CLASS_A or self.netmap_att["netmap"] == env.CLASS_B:
             if self.view_object == 0:
-                d.draw_network_address(self.netmap_att)
+                draw_netmap.address(self.netmap_att)
 
                 if(self.netmap_att["selected_obj"] >= 0):
                     # 1つのオブジェクトのみを表示して中央に移動するアニメーション
-                    d.draw_network_object(self.netmap_att, [ self.netmap_att["selected_obj"] ], self.node_status)
+                    draw_netmap.net_obj(self.netmap_att, [ self.netmap_att["selected_obj"] ], self.node_status)
                     if(len(self.netmap_att["addr_obj"]) == self.netmap_att["netmap"]):
                         # アドレスオブジェクトの要素数とネットワークマップの深さと同一
                         self.netmap_att["addr_obj"].append(self.netmap_att["selected_obj"])
                 else:
                     # 256のオブジェクトを表示するアニメーション
-                    d.draw_network_object(self.netmap_att, [], self.node_status)
+                    draw_netmap.net_obj(self.netmap_att, [], self.node_status)
 
                 # イベントログの描画
                 self.draw_netmap_event_log()
@@ -562,17 +584,17 @@ class App:
 
         # network map class C
         if self.netmap_att["netmap"] == env.CLASS_C and self.view_object == 0:
-            d.draw_network_address(self.netmap_att)
+            draw_netmap.address(self.netmap_att)
 
             if(self.netmap_att["selected_obj"] >= 0):
                 # 1つのオブジェクトのみを表示して中央に移動するアニメーション
-                d.draw_network_object(self.netmap_att, [ self.netmap_att["selected_obj"] ], self.node_status )
+                draw_netmap.net_obj(self.netmap_att, [ self.netmap_att["selected_obj"] ], self.node_status )
                 if len(self.netmap_att["addr_obj"]) == 3:
                     self.netmap_att["addr_obj"].append(self.netmap_att["selected_obj"])
 
             else:
                 # 256のオブジェクトを表示するアニメーション
-                d.draw_network_object(self.netmap_att, [], self.node_status)
+                draw_netmap.net_obj(self.netmap_att, [], self.node_status)
 
             # イベントログの描画
             self.draw_netmap_event_log()
@@ -594,11 +616,11 @@ class App:
             self.switch_monolith_grow_v()
 
         elif self.netmap_att["netmap"] == env.HOST and self.view_object == 4:
-            d.draw_network_address(self.netmap_att)
+            draw_netmap.address(self.netmap_att)
             xy = self.get_center_object_xy()
             x = xy[0]
             y = xy[1]
-            d.draw_wide_object(self.netmap_att["selected_obj"], x, y, self.view_object_scale_x, self.view_object_scale_y, False, self.bgcolor, self.bgcolor, env.DARK_GRAY, env.DARK_GRAY)
+            draw_netmap.wide_obj(self.netmap_att["selected_obj"], x, y, self.view_object_scale_x, self.view_object_scale_y, False, self.bgcolor, self.bgcolor, env.DARK_GRAY, env.DARK_GRAY)
 
             # モノリスのアイコン表示
             # コンフィグを読み込んで定義されていれば優先する
@@ -614,10 +636,10 @@ class App:
 
             # 右下の時間的な何か
             now = self.get_now()
-            d.draw_time(now)
+            draw_mono.draw_time(now)
 
             # モノリスのログ
-            d.draw_monolith_log_area()
+            draw_mono.area()
 
             # 現在時刻を基準とした前後のログを取得
             logs = self.get_filterd_logs(now, True)
@@ -632,7 +654,7 @@ class App:
                 log = logs[self.page["monolith"]]
                 keys = ["phase","attack","from","to","note"]
                 i=0
-                d.draw_monolith_log_time(log, None, env.DARK_BLUE, i)
+                draw_mono.time(log, None, env.DARK_BLUE, i)
                 i=1
                 messages = []
                 for k in keys:
@@ -645,17 +667,17 @@ class App:
                 for m in messages:
                     margin = env.MONOLITH_TITLE_LENGTH * env.CHAR_WIDTH
                     title = "{0:6}:".format(m["key"])
-                    d.draw_monolith_log(title,  env.DARK_BLUE, i)
-                    d.draw_monolith_log(str(m["value"]), env.DARK_GRAY, i, margin)
+                    draw_mono.log(title,  env.DARK_BLUE, i)
+                    draw_mono.log(str(m["value"]), env.DARK_GRAY, i, margin)
                     i += 1
             
-                (nextline_margin, nextline_width) = d.draw_monolith_log_next(self.page["monolith"], len(logs))
+                (nextline_margin, nextline_width) = draw_mono.next(self.page["monolith"], len(logs))
                 self.monolith_nextline_x1 = env.MONOLITH_X1 + env.MONOLITH_MARGIN_LEFT + nextline_margin
                 self.monolith_nextline_y1 = env.MONOLITH_Y2 - env.MONOLITH_MARGIN_TOP - env.CHAR_HEIGHT
                 self.monolith_nextline_x2 = env.MONOLITH_X2 - nextline_margin
                 self.monolith_nextline_y2 = self.monolith_nextline_y1 + env.CHAR_HEIGHT
             else:
-                d.draw_monolith_log("---- event not found ----")
+                draw_mono.log("---- event not found ----")
             
 
 
@@ -733,16 +755,16 @@ class App:
 
 
     def switch_object_center(self):
-        d.draw_network_address(self.netmap_att)
+        draw_netmap.address(self.netmap_att)
         xy = self.get_center_object_xy()
         x = xy[0]
         y = xy[1]
-        d.draw_object(self.netmap_att["selected_obj"], x, y, True, self.bgcolor)
+        draw_netmap.obj(self.netmap_att["selected_obj"], x, y, True, self.bgcolor)
         self.view_object = 2
 
 
     def switch_object_wide(self):
-        d.draw_network_address(self.netmap_att)
+        draw_netmap.address(self.netmap_att)
         xy = self.get_center_object_xy()
         x = xy[0]
         y = xy[1]
@@ -763,7 +785,7 @@ class App:
         if( self.view_object_scale_x == max_width and self.view_object_scale_y == max_height):
             self.view_object = 3
         
-        d.draw_wide_object(self.netmap_att["selected_obj"], x, y, self.view_object_scale_x, self.view_object_scale_y, False, self.bgcolor, self.bgcolor)
+        draw_netmap.wide_obj(self.netmap_att["selected_obj"], x, y, self.view_object_scale_x, self.view_object_scale_y, False, self.bgcolor, self.bgcolor)
 
 
     def switch_next_netmap(self, next_map):
@@ -796,9 +818,9 @@ class App:
         # 表示領域を制限
         pyxel.clip(x, y, x2, y2)
 
-        d.draw_network_object(self.netmap_att, [])
+        draw_netmap.net_obj(self.netmap_att, [])
 
-        d.draw_network_address(self.netmap_att)
+        draw_netmap.address(self.netmap_att)
 
         if( self.view_object_scale_x2 == max_width and self.view_object_scale_y2 == max_height):
             self.netmap_att["netmap"] = next_map
@@ -806,7 +828,7 @@ class App:
 
 
     def switch_monolith_grow_h(self):
-            d.draw_network_address(self.netmap_att)
+            draw_netmap.address(self.netmap_att)
             xy = self.get_center_object_xy()
             x = xy[0]
             y = xy[1]
@@ -819,11 +841,11 @@ class App:
                 self.view_object_scale_x = max_width
                 self.view_object = 3
             
-            d.draw_wide_object(self.netmap_att["selected_obj"], x, y, self.view_object_scale_x, self.view_object_scale_y, False, self.bgcolor, self.bgcolor)
+            draw_netmap.wide_obj(self.netmap_att["selected_obj"], x, y, self.view_object_scale_x, self.view_object_scale_y, False, self.bgcolor, self.bgcolor)
 
 
     def switch_monolith_grow_v(self):
-            d.draw_network_address(self.netmap_att)
+            draw_netmap.address(self.netmap_att)
             xy = self.get_center_object_xy()
             x = xy[0]
             y = xy[1]
@@ -837,7 +859,7 @@ class App:
                 self.view_object = 4
                 self.netmap_att["netmap"] = env.HOST
             
-            d.draw_wide_object(self.netmap_att["selected_obj"], x, y, self.view_object_scale_x, self.view_object_scale_y, False, self.bgcolor, self.bgcolor)
+            draw_netmap.wide_obj(self.netmap_att["selected_obj"], x, y, self.view_object_scale_x, self.view_object_scale_y, False, self.bgcolor, self.bgcolor)
 
 
 
@@ -849,11 +871,11 @@ class App:
         self.icon["world"].put()
 
         # 弾的なものを描画する
-        d.draw_bullets(self.bullets, self.icon)
+        draw_bullets.draw(self.bullets, self.icon)
 
         # 時間的な何か
         now = self.get_now()
-        d.draw_time(now)
+        draw_bullets.time(now)
         return 1
 
 
@@ -898,18 +920,18 @@ class App:
 
         if len(self.targets) > 0:
             i = 0
-            d.draw_target_log_time(self.targets[0], self.targets[-1], time_color, i)
+            draw_tlog.time(self.targets[0], self.targets[-1], time_color, i)
             i = 1
             for idx in range(len(self.targets)):
                 if(idx >= start and idx < end):
-                    d.draw_target_log(self.targets[idx], "", font_color, i)
+                    draw_tlog.log(self.targets[idx], "", font_color, i)
                     i += 1
                 if(idx >= end):
                     break
             if(self.page["log"] + 1 < page_max):
-                d.draw_target_log_next(time_color, i)
+                draw_tlog.next(time_color, i)
         else:
-            d.draw_target_log("---- event not found ----")
+            draw_tlog.log("---- event not found ----")
         #print("log_count: %d" %(len(self.targets)))
         return 1
 

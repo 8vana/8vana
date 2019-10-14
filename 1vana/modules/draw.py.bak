@@ -1,13 +1,45 @@
 import re
 import pyxel
-import env
 from datetime import datetime
 
+# color http://tkitao.hatenablog.com/entry/2017/01/26/193908
+BLACK = 0
+DARK_BLUE = 1
+DARK_PURPLE = 2
+DARK_GREEN = 3
+BROWN = 4
+DARK_GRAY = 5
+LIGHT_GRAY = 6
+WHITE = 7
+RED = 8
+ORANGE = 9
+YELLOW = 10
+GREEN = 11
+BLUE = 12
+INDIGO = 13
+PINK = 14
+PEACH = 15
+
+LEVEL_1 = RED
+LEVEL_2 = PINK
+LEVEL_3 = ORANGE
+LEVEL_4 = BLUE
+LEVEL_5 = LIGHT_GRAY
+
+WORLDMAP = 0
+CLASS_A  = 1
+CLASS_B  = 2
+CLASS_C  = 3
+HOST     = 4
 
 class Draw:
+    def __init__(
+            self, x
+        ):
+        self.x = x
 
     def draw_object(
-        self, idx, x, y,  reset=False, cls_color=env.BLACK, line_color=env.BLACK, bg_color=env.DARK_GRAY, font_color=env.WHITE
+        self, idx, x, y,  reset=False, cls_color=BLACK, line_color=BLACK, bg_color=DARK_GRAY, font_color=WHITE
         ):
 
         if(reset):
@@ -33,7 +65,7 @@ class Draw:
 
 
     def draw_wide_object(
-        self, idx, x, y, xx=0, yy=0, reset=False, cls_color=env.BLACK, line_color=env.BLACK, bg_color=env.DARK_GRAY, font_color=env.WHITE
+        self, idx, x, y, xx=0, yy=0, reset=False, cls_color=BLACK, line_color=BLACK, bg_color=DARK_GRAY, font_color=WHITE
         ):
 
         if(reset):
@@ -58,7 +90,7 @@ class Draw:
         return True
 
 
-    def draw_fill_object(self, str, x, y, xx=0, yy=0, reset=False, cls_color=env.BLACK, line_color=env.BLACK, bg_color=env.DARK_GRAY, font_color=env.WHITE):
+    def draw_fill_object(self, str, x, y, xx=0, yy=0, reset=False, cls_color=BLACK, line_color=BLACK, bg_color=DARK_GRAY, font_color=WHITE):
 
         if(reset):
             pyxel.cls(0)  # reset display color
@@ -98,14 +130,14 @@ class Draw:
             addr.append(str(obj_map[0]))
             
             if(
-                att["netmap"] == env.WORLDMAP and
+                att["netmap"] == WORLDMAP and
                 node_status.get(addr[0]) != None
                 ):
                 status = node_status[addr[0]]["status"]
                 if(status["update"] > event_time):
                     event_time = status["update"]
             elif(
-                att["netmap"] == env.CLASS_A and
+                att["netmap"] == CLASS_A and
                 node_status.get(addr[0]) != None and
                 node_status.get(addr[0]).get(addr[1]) != None
                 ):
@@ -113,7 +145,7 @@ class Draw:
                 if(status["update"] > event_time):
                     event_time = status["update"]
             elif(
-                att["netmap"] == env.CLASS_B and
+                att["netmap"] == CLASS_B and
                 node_status.get(addr[0]) != None and
                 node_status.get(addr[0]).get(addr[1]) != None and
                 node_status.get(addr[0]).get(addr[1]).get(addr[2]) != None
@@ -122,7 +154,7 @@ class Draw:
                 if(status["update"] > event_time):
                     event_time = status["update"]
             elif(
-                att["netmap"] == env.CLASS_C and
+                att["netmap"] == CLASS_C and
                 node_status.get(addr[0]) != None and
                 node_status.get(addr[0]).get(addr[1]) != None and
                 node_status.get(addr[0]).get(addr[1]).get(addr[2]) != None and
@@ -145,15 +177,15 @@ class Draw:
             # ノードのイベント発生状態からバックグラウンドカラーを選択する
             delta = att["now"] - event_time
             if(   delta >= (0 - env.VISUALIZE_TIME_RANGE) and delta <= 60 * 1):
-                bg_color = env.LEVEL_1
+                bg_color = LEVEL_1
             elif( delta >  60 * 1  and delta <= 60 * 5):
-                bg_color = env.LEVEL_2
+                bg_color = LEVEL_2
             elif( delta >  60 * 5  and delta <= 60 * 10):
-                bg_color = env.LEVEL_3
+                bg_color = LEVEL_3
             elif( delta >  60 * 10 and delta <= 60 * 30):
-                bg_color = env.LEVEL_4
+                bg_color = LEVEL_4
             elif( delta >  60 * 30 and delta <= 60 * 60):
-                bg_color = env.LEVEL_5
+                bg_color = LEVEL_5
             
 
             if(len(obj_list) > 0):
@@ -221,7 +253,7 @@ class Draw:
 
 
 
-    def draw_time(self, time, color=env.WHITE):
+    def draw_time(self, time, color=WHITE):
         # draw time
         epoch = "{:.1f}".format(time)
         dt    = datetime.fromtimestamp(int(time))
@@ -235,61 +267,12 @@ class Draw:
         return True
 
 
-    def draw_target_log_time(self, target1, target2, color=env.WHITE, count=0, offset=env.CHAR_HEIGHT):
-        # draw strings on log area
-        dt1   = datetime.fromtimestamp(target1["time"])
-        time1 = "{0:%Y-%m-%d %H:%M:%S}".format(dt1)
-        time2 = ""
-
-        if(type(target2) is dict and target1 != target2):
-            #print(target2)
-            dt2   = datetime.fromtimestamp(target2["time"])
-            time2 = " -> {0:%Y-%m-%d %H:%M:%S}".format(dt2)
-
-        time = time1 + time2
-        pyxel.text(
-            env.LOG_AREA_X,
-            env.LOG_AREA_Y + (offset * count),
-            time,
-            color)  # x, y, string, color
-        return (count + 1)
-
-
-    def draw_target_log_next(self, color=env.WHITE, count=0, offset=env.CHAR_HEIGHT):
-        # draw click to next sign on log area
-        pyxel.text(
-            env.LOG_AREA_X,
-            env.LOG_AREA_Y + (offset * count),
-            "**** click to next page ****",
-            color)  # x, y, string, color
-        return (count + 1)
-
-
-    def draw_target_log(self, target, note="", color=env.GREEN, count=0, offset=env.CHAR_HEIGHT):
-        # draw strings on log area
-        log = ""
-        if(type(target) is dict):
-            #dt   = datetime.fromtimestamp(target["time"])
-            #time = "{0:%Y-%m-%d %H:%M:%S}".format(dt)
-            #time = "{0:%H:%M:%S}".format(dt)
-            #log  = "{}:{}:{}: {} > {} {}".format(time, target["phase"], target["attack"], target["from"], target["to"], note)
-            log  = "{}: {} > {} {}".format(target["attack"], target["from"], target["to"], note)
-        elif(type(target) is str):
-            log = target
-
-        pyxel.text(
-            env.LOG_AREA_X,
-            env.LOG_AREA_Y + (offset * count),
-            log,
-            color)  # x, y, string, color
-        return (count + 1)
-
-    def draw_monolith_log_area(self, color=env.LIGHT_GRAY):
+    def draw_monolith_log_area(self, color=LIGHT_GRAY):
         pyxel.rect(env.MONOLITH_X1, env.MONOLITH_Y1, env.MONOLITH_X2, env.MONOLITH_Y2, color)
         return True
 
 
-    def draw_monolith_log_time(self, target1, target2, color=env.WHITE, count=0, offset=env.CHAR_HEIGHT):
+    def draw_monolith_log_time(self, target1, target2, color=WHITE, count=0, offset=env.CHAR_HEIGHT):
         # draw strings on log area
         dt1   = datetime.fromtimestamp(target1["time"])
         time1 = "{0:%Y-%m-%d %H:%M:%S}".format(dt1)
@@ -309,7 +292,7 @@ class Draw:
         return (count + 1)
 
 
-    def draw_monolith_log_next(self, page, page_max, color=env.BROWN, count=0, offset=env.CHAR_HEIGHT):
+    def draw_monolith_log_next(self, page, page_max, color=BROWN, count=0, offset=env.CHAR_HEIGHT):
         # draw click to next sign on log area
         line       = "<<    <- {0:>4}/{1:<4} ->    >>".format(page+1, page_max)
         line_width = len(line) * env.CHAR_WIDTH
@@ -331,17 +314,4 @@ class Draw:
             log,
             color)  # x, y, string, color
         return (count + 1)
-
-
-    def draw_bullets(self, bullets, icon):
-        xy = icon["world"].get_center_position()
-        x  = xy[0]
-        y  = xy[1]
-        for bullet in bullets:
-            pyxel.line(x, y, bullet["state"].x2, bullet["state"].y2, bullet["line_color"])
-            bullet["icon"].pmove_abs(bullet["state"].x - (bullet["icon"].width / 2), bullet["state"].y - (bullet["icon"].height / 2))
-            if(bullet["line_color"] == env.RED):
-                icon["mono"].pmove_abs(bullet["state"].x2, (bullet["state"].y2 - 6))
-                icon["fire"].pmove_abs(bullet["state"].x2, bullet["state"].y2)
-        return True
 
