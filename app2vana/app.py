@@ -9,8 +9,12 @@ import random
 import json
 import pyxel
 import configparser
-from util import Utility
-from modules.Hachi_Actor import Actor
+
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
+
+from app2vana.util import Utility
+from app2vana.modules.Hachi_Actor import Actor
 
 
 # Type of printing.
@@ -133,7 +137,7 @@ class DisplayText:
 
 
 # Main class.
-class Application:
+class App2vana:
     def __init__(self, utility):
         self.utility = utility
         self.file_name = os.path.basename(__file__)
@@ -142,7 +146,7 @@ class Application:
 
         # Read config.ini.
         config = configparser.ConfigParser()
-        config.read(os.path.join(full_path, 'config.ini'), encoding='utf-8')
+        config.read(os.path.join(self.full_path, 'config.ini'), encoding='utf-8')
         self.mode_name = config['Common']['mode_name']
         self.asset_dir = os.path.join(self.full_path, config['Common']['asset_path'])
         self.resource_file = os.path.join(self.asset_dir, config['Common']['resource_file'])
@@ -887,7 +891,7 @@ if __name__ == '__main__':
     utility.write_log(20, '[In] 8Vana [{}].'.format(file_name))
 
     # Start application
-    Application(utility)
+    App2vana(utility)
 
     print(os.path.basename(__file__) + ' finish!!')
     utility.write_log(20, '[Out] 8Vana [{}].'.format(file_name))

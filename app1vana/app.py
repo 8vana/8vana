@@ -9,16 +9,20 @@ import json
 import math
 import re
 
+from app1vana.modules.actor       import Actor
+from app1vana.modules.actor_state import ActorState
+from app1vana.modules.fonts       import Fonts
+from app1vana.modules.digest      import Digest
+from app1vana.modules.util        import Util
+from app1vana.modules.bullet      import Bullet
+from app1vana.modules.tlog        import Targetlog
+from app1vana.modules.monolith    import Monolith
+from app1vana.modules.netmap      import Netmap
+
+import os
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 import env
-from modules.actor       import Actor
-from modules.actor_state import ActorState
-from modules.fonts       import Fonts
-from modules.digest      import Digest
-from modules.util        import Util
-from modules.bullet      import Bullet
-from modules.tlog        import Targetlog
-from modules.monolith    import Monolith
-from modules.netmap      import Netmap
 
 
 
@@ -55,10 +59,14 @@ parser.add_argument('-l','--log_time',
     action="store_true")
 args = parser.parse_args()
 
-class App:
-    def __init__(self):
+class App１vana:
+    def __init__(self, log_time=False):
+        self.file_name = os.path.basename(__file__)
+        self.full_path = os.path.dirname(os.path.abspath(__file__))
+        self.root_path = os.path.join(self.full_path, '..')
+
         pyxel.init(WINDOW_WIDTH, WINDOW_HEIGHT, caption="8vana: Network Map")
-        self.dir = os.path.dirname(os.path.abspath("__file__")) + "/"
+        self.dir = os.path.dirname(os.path.abspath("__file__")) + "/app1vana/"
         self.x = 0
 
         discover = r"^discovery?$"
@@ -83,7 +91,7 @@ class App:
             with open(self.dir + env.INPUT_LOG, 'r') as json_file :
                 self.log = json.load(json_file)
                 print("[option]log_time: " + str(args.log_time))
-                if(args.log_time != False):
+                if(args.log_time != False or log_time != False):
                     self.time_begin = self.log[0]["time"] - env.VISUALIZE_TIME_RANGE - env.VISUALIZE_TIME_WAIT
                 else:
                     now = datetime.datetime.now()
@@ -1037,4 +1045,12 @@ class App:
         }
         return True
 
-App()
+# main.
+if __name__ == '__main__':
+    file_name = os.path.basename(__file__)
+    full_path = os.path.dirname(os.path.abspath(__file__))
+
+    # Start application
+    App1vana()
+
+    print(file_name + ' finish!!')
