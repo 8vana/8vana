@@ -25,6 +25,7 @@ class Convert16:
     
     def __init__(self, infile):
       self.infile = infile
+      self.converted = {}
       self.debug  = 1
     
     def getpix(self, img):
@@ -67,23 +68,32 @@ class Convert16:
       for x in range(width):
         for y in range(height):
           count += 1
-          rgb1 = img.getpixel((x, y))
-          lab1 = ciede2000.rgb2lab(rgb1)
+          rgb1    = img.getpixel((x, y))
+          lab1    = ciede2000.rgb2lab(rgb1)
+          pattern = "_".join(map(str,rgb1))
       
-          results = []
-          for k in Convert16.acolor:
-            rgb2 = Convert16.acolor[k]
-            lab2 = ciede2000.rgb2lab(rgb2)
-            result = ciede2000.ciede2000(lab1, lab2)
-            results.append({ "color": k, "result": result })
-            if self.debug == 1:
-              print("rgb1: %s, rgb2: %s : %s" % (rgb1, rgb2, result))
+          if(pattern in self.converted):
+            # same pattern
+            output.putpixel((x,y), Convert16.acolor[self.converted[pattern]])
+          else:
+            results = []
+            for k in Convert16.acolor:
+              rgb2 = Convert16.acolor[k]
+              lab2 = ciede2000.rgb2lab(rgb2)
+              result = ciede2000.ciede2000(lab1, lab2)
+              results.append({ "color": k, "result": result })
+              if self.debug == 1:
+                print("rgb1: %s, rgb2: %s : %s" % (rgb1, rgb2, result))
       
-          results.sort(key=lambda x: x["result"])
-          if self.debug == 1 and results[0]["color"] != "white":
-            print(results[0])
+            results.sort(key=lambda x: x["result"])
+            if self.debug == 1 and results[0]["color"] != "white":
+              print(results[0])
 
-          output.putpixel((x, y), Convert16.acolor[results[0]["color"]])
+            pattern = "_".join(map(str,rgb1))
+            self.converted[pattern] = results[0]["color"]
+
+            output.putpixel((x, y), Convert16.acolor[results[0]["color"]])
+          
           #print("%d," % (count), end="")
       
       output.save(outfile, "PNG")

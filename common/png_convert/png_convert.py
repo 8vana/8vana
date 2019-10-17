@@ -2,6 +2,11 @@ import os
 import sys
 import convert16
 
+import time
+
+
+start = time.time()
+
 if(len(sys.argv) > 1):
     infile = sys.argv[1]
     if(len(sys.argv) > 2):
@@ -16,3 +21,9 @@ if(len(sys.argv) > 1):
 else:
     print("invalid arguments.")
     print("ex: " + sys.argv[0] + " <infile> <outfile>")
+
+
+print("start: ", start)
+end = time.time()
+print("  end: ", end)
+print(end - start)
