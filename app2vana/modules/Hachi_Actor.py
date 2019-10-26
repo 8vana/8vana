@@ -63,6 +63,6 @@ class Actor:
         self.status = status
         if self.corruption_flag:
             text_color = 10
-        elif self.wreck_flag:
+        if self.wreck_flag:
             text_color = 8
         self.text_color = text_color
