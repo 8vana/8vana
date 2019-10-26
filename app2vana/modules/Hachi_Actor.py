@@ -44,38 +44,16 @@ class Actor:
         self.status = 'normal'
         self.origin_framecount = 0
         self.wait_framecount = 0.0
-        self.system_info = {'OS': 'Debian',
-                            'Web': 'Apache 2.2',
-                            'Lang': 'PHP 5.6',
-                            'CMS': 'WordPress 4.2'}
-        self.other_info = []
-        self.vuln_info = []
+        self.corruption_flag = False
+        self.wreck_flag = False
 
         # Actor text information.
         self.text_x = 0
         self.text_y = 0
         self.text_color = self.utility.color_7
 
-        # TODO: テキスト描画テスト用のコード
-        cve_list = ['CVE-2013-2249 : Apache HTTP Server 2.2.10',
-                    'CVE-2013-1862 : Apache HTTP Server 2.2.18',
-                    'CVE-2016-8612 : Apache HTTP Server 2.2.9',
-                    'CVE-2014-0098 : Apache HTTP Server 2.2.25',
-                    'CVE-2014-9426 : PHP 5.6.4',
-                    'CVE-2014-9425 : PHP 5.6.2',
-                    'CVE-2014-8142 : PHP 5.6.0',
-                    'CVE-2014-5459 : PHP 5.6.0',
-                    'CVE-2015-5734 : WordPress 4.2.3',
-                    'CVE-2015-5731 : WordPress 4.2.3',
-                    'CVE-2015-5730 : WordPress 4.2.3',
-                    'CVE-2015-3440 : WordPress 4.2']
-        for idx in range(50):
-            self.other_info.append('other_text{}'.format(idx + 1))
-        for idx in range(50):
-            if idx < 12:
-                self.vuln_info.append(cve_list[idx])
-            else:
-                self.vuln_info.append('cve_text{}'.format(idx + 1))
+        # Event information for monolith.
+        self.event_info = []
 
     # Update.
     def update(self, x=0, u=0, w=0, status='normal', text_color=7):
@@ -83,4 +61,8 @@ class Actor:
         self.u = u
         self.w += w
         self.status = status
+        if self.corruption_flag:
+            text_color = 10
+        elif self.wreck_flag:
+            text_color = 8
         self.text_color = text_color

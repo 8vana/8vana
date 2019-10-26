@@ -6,6 +6,7 @@ import time
 import datetime
 import codecs
 import random
+import re
 import json
 import pyxel
 import configparser
@@ -165,6 +166,7 @@ class App2vana:
             self.utility.print_message(WARNING, 'Too many targets. Clipped : {} -> {}'.format(len(self.targets), 8))
             self.targets = self.targets[0:8]
         self.Target = []
+        self.wreck_regex = config['Target']['wreck_str']
 
         # Read setting of inputting log.
         self.watch_period = int(config['LogParser']['watch_period'])
@@ -240,23 +242,15 @@ class App2vana:
         return height
 
     # Create detail information.
-    def create_detail_info(self, system_info, vuln_info, other_info):
-        max_msg_w = 50
+    def create_detail_info(self, event_info):
+        max_msg_w = 45
         max_msg_h = 16
         disp_info = []
         disp_page = []
 
-        # Write system information.
-        for key in system_info.keys():
-            disp_info.append('{} : {}'.format(key, system_info[key])[:max_msg_w])
-
-        # Write vulnerability information.
-        for vuln_msg in vuln_info:
-            disp_info.append(vuln_msg[:max_msg_w])
-
-        # Write other information.
-        for other_msg in other_info:
-            disp_info.append(other_msg[:max_msg_w])
+        # Write event.
+        for event in event_info:
+            disp_info.append('{}'.format(event)[:max_msg_w])
 
         # Create page.
         page = []
@@ -524,13 +518,9 @@ class App2vana:
                 # Extract message from Target or Attacker.
                 message = []
                 if monolith.target_type == 'Target':
-                    message = self.create_detail_info(self.Target[monolith.target_id].system_info,
-                                                      self.Target[monolith.target_id].vuln_info,
-                                                      self.Target[monolith.target_id].other_info)
+                    message = self.create_detail_info(self.Target[monolith.target_id].event_info)
                 else:
-                    message = self.create_detail_info(self.Attacker[monolith.target_id].system_info,
-                                                      self.Attacker[monolith.target_id].vuln_info,
-                                                      self.Attacker[monolith.target_id].other_info)
+                    message = self.create_detail_info(self.Attacker[monolith.target_id].event_info)
 
                 # Write message.
                 monolith.update(max_page=len(message))
@@ -678,6 +668,20 @@ class App2vana:
         if pyxel.frame_count % self.utility.wait_framecount(self.watch_period) == 0:
             log_contents = self.watch(self.read_start_byte)
 
+            # Get event information.
+            for log_info in log_contents:
+                # Select target.
+                t_idx = self.get_object_index(self.targets, log_info['to'])
+                if t_idx is None:
+                    continue
+                if len(log_info['note']['CVE']) != 0:
+                    date_obj = self.utility.transform_epoch_object(float(log_info['time']))
+                    log_time = self.utility.transform_date_string(date_obj, '%Y%m%d%H%M%S')
+                    self.Target[t_idx].event_info.insert(0, log_time + ':' + log_info['note']['option'])
+                    self.Target[t_idx].corruption_flag = True
+                    if re.search(self.wreck_regex, log_info['note']['option']) is not None:
+                        self.Target[t_idx].wreck_flag = True
+
             # Decide Actor's action using log.
             for log_info in log_contents:
                 # Select attacker and target.
@@ -701,8 +705,12 @@ class App2vana:
 
                 # Make message.
                 msg = '{} executes {} to Dest={}'.format(log_info['from'],
-                                                         log_info['attack'],
-                                                         log_info['to'])
+                                                          log_info['attack'],
+                                                          log_info['to'])
+                self.DisplayText.push(msg, self.utility.color_7)
+                if len(log_info['note']['CVE']) != 0:
+                    msg = log_info['note']['option']
+                    self.DisplayText.push(msg, self.utility.color_10)
 
                 # Check attacker's action flag.
                 if self.attacker_action_flag:
@@ -718,7 +726,6 @@ class App2vana:
                     self.Attacker[a_idx].update(x=-8, u=40, w=8,
                                                 status=self.utility.status_attack_main,
                                                 text_color=self.utility.color_10)
-                    self.DisplayText.push(msg, self.utility.color_7)
 
                     # Set target information to bullet instance.
                     new_bullet = Bullet()
@@ -740,7 +747,6 @@ class App2vana:
                     self.Attacker[a_idx].update(u=168,
                                                 status=self.utility.status_attack_se,
                                                 text_color=self.utility.color_14)
-                    self.DisplayText.push(msg, self.utility.color_7)
                     self.Target[t_idx].origin_framecount = pyxel.frame_count
                     self.Target[t_idx].wait_framecount = wait_framecount
                     self.Target[t_idx].update(status=self.utility.status_attack_se,
@@ -766,7 +772,6 @@ class App2vana:
                     self.Attacker[a_idx].update(u=88,
                                                 status=self.utility.status_attack_sub,
                                                 text_color=self.utility.color_11)
-                    self.DisplayText.push(msg, self.utility.color_7)
                     self.Target[t_idx].origin_framecount = pyxel.frame_count
                     self.Target[t_idx].wait_framecount = wait_framecount
                     self.Target[t_idx].update(status=self.utility.status_attack_sub,
@@ -781,7 +786,6 @@ class App2vana:
                     self.Attacker[a_idx].update(u=128,
                                                 status=self.utility.status_attack_probe,
                                                 text_color=self.utility.color_12)
-                    self.DisplayText.push(msg, self.utility.color_7)
                     self.Target[t_idx].origin_framecount = pyxel.frame_count
                     self.Target[t_idx].wait_framecount = wait_framecount
                     self.Target[t_idx].update(status=self.utility.status_attack_probe,
@@ -883,23 +887,23 @@ class App2vana:
                 # Shoot bullet.
                 if target.status == self.utility.status_attack_main:
                     target.update(x=1, status=self.utility.status_normal, text_color=self.utility.color_7)
-                    msg = 'The {} is critically damaged.'.format(target.hostname)
-                    self.DisplayText.push(msg, self.utility.color_10)
+                    # msg = 'The {} is critically damaged.'.format(target.hostname)
+                    # self.DisplayText.push(msg, self.utility.color_10)
                 # Shoot laser.
                 elif target.status == self.utility.status_attack_se:
                     target.update(status=self.utility.status_normal, text_color=self.utility.color_7)
-                    msg = 'The {} is seriously damaged.'.format(target.hostname)
-                    self.DisplayText.push(msg, self.utility.color_14)
+                    # msg = 'The {} is seriously damaged.'.format(target.hostname)
+                    # self.DisplayText.push(msg, self.utility.color_14)
                 # Shoot machine gun.
                 elif target.status == self.utility.status_attack_sub:
                     target.update(status=self.utility.status_normal, text_color=self.utility.color_7)
-                    msg = 'The {} is slightly damaged.'.format(target.hostname)
-                    self.DisplayText.push(msg, self.utility.color_11)
+                    # msg = 'The {} is slightly damaged.'.format(target.hostname)
+                    # self.DisplayText.push(msg, self.utility.color_11)
                 # Probe.
                 elif target.status == self.utility.status_attack_probe:
                     target.update(status=self.utility.status_normal, text_color=self.utility.color_7)
-                    msg = 'The {} is being investigated.'.format(target.hostname)
-                    self.DisplayText.push(msg, self.utility.color_12)
+                    # msg = 'The {} is being investigated.'.format(target.hostname)
+                    # self.DisplayText.push(msg, self.utility.color_12)
                 target.origin_framecount = 0
                 target.wait_framecount = 0.0
 

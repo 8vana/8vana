@@ -169,8 +169,15 @@ class Utility:
             return datetime.strptime(target_date, format)
 
     # Transform date from object to string.
-    def transform_date_string(self, target_date):
-        return target_date.strftime(self.report_date_format)
+    def transform_date_string(self, target_date, format=None):
+        if format is None:
+            return target_date.strftime(self.report_date_format)
+        else:
+            return target_date.strftime(format)
+
+    # Transform date object from epoch (UNIX time).
+    def transform_epoch_object(self, epoch):
+        return datetime.fromtimestamp(epoch)
 
     # Delete control character.
     def delete_ctrl_char(self, origin_text):

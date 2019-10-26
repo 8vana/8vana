@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
 import pyxel
 import os
 import argparse
@@ -23,17 +25,18 @@ INDIGO = 13
 PINK = 14
 PEACH = 15
 
-#CHAR_WIDTH    = 5 # pyxel.text
-#CHAR_HEIGHT   = 7 # pyxel.text
+# CHAR_WIDTH    = 5 # pyxel.text
+# CHAR_HEIGHT   = 7 # pyxel.text
 
-CHAR_WIDTH    = 8
-CHAR_HEIGHT   = 17
+CHAR_WIDTH = 8
+CHAR_HEIGHT = 17
 
 parser = argparse.ArgumentParser(description='1vana')
 parser.add_argument('-l','--log_time',
     help='このオプションは、ログ再生機能で利用することを想定されており、ログファイル先頭のリソース（最も古いログ）から時刻を取得し、開始時刻の基準値として利用します。このオプションを利用しない場合は、現在時刻が開始時刻として利用されます。',
     action="store_true")
 args = parser.parse_args()
+
 
 class App:
     number_of_mode = 2
@@ -47,14 +50,13 @@ class App:
         self.icon["title"].set_size(224, 71)
         self.icon["title"].imageload(self.dir + "common/assets/8vana_logo_224_16_edit.png", DARK_GREEN) # dark_green
 
-        self.count        = 0
+        self.count = 0
         self.selected_app = 0
 
         # draw mouse cursor
         pyxel.mouse(True)
 
         pyxel.run(self.update, self.draw)
-
 
     def update(self):
         if pyxel.btnp(pyxel.KEY_Q):
@@ -78,19 +80,15 @@ class App:
 
         pyxel.text(84, 132, "Push SPACE: Select mode", 7)
         pyxel.text(84, 140, "Push ENTER: Start 8vana", 7)
-        if(self.selected_app == 0):
+        if self.selected_app == 0:
             pyxel.text(128, 152, "> 1vana", 7)
             pyxel.text(128, 160, "  2vana", 7)
-        elif(self.selected_app == 1):
+        elif self.selected_app == 1:
             pyxel.text(128, 152, "  1vana", 7)
             pyxel.text(128, 160, "> 2vana", 7)
 
 
-
-
 class App2:
-
-
     contents = '''[
     {
         "titlej" : "title", 
@@ -187,6 +185,7 @@ class App2:
             "_", "<", ">", "(", ")", "!", "?", "#", ",", ".",
             ":", ";", "$", "%", "*", "=", "\\", "`", "{", "}"
             ]
+
         self.font = {}
         self.font["white8"] = Fonts()
         self.font["white8"].imageload(self.dir + "app1vana/images/alpha/num_alpha2_white_pink_150r1.png", PINK)
@@ -206,17 +205,14 @@ class App2:
 
         self.roles = json.loads(App2.contents)
 
-
         # draw mouse cursor
         pyxel.mouse(True)
 
         pyxel.run(self.update, self.draw)
 
-
     def update(self):
-        if(pyxel.frame_count % self.update_frame == 0):
+        if pyxel.frame_count % self.update_frame == 0:
             self.distance += 1
-        
         if pyxel.btnp(pyxel.KEY_Q):
             pyxel.quit()
         if pyxel.btnp(pyxel.KEY_ESCAPE):
@@ -231,72 +227,66 @@ class App2:
         pyxel.text(88, 60, "The visualization tool of", 0)
         pyxel.text(88, 68, "security incidents like retro games.", 0)
 
-
         i = 0
         for row in self.roles:
-            width   = 255
+            width = 255
             start_y = 255
-            stop_x  = 88
-            if(len(row["title"]) > 0):
+            stop_x = 88
+            if len(row["title"]) > 0:
                 title = "## " + row["title"] + " ##"
             else:
                 title = row["title"]
-            name    = row["name"]
-            tlen    = len(title)
-            nlen    = len(name)
+            name = row["name"]
+            tlen = len(title)
+            nlen = len(name)
 
-            if(tlen > width): continue
-            if(nlen > width): continue
+            if tlen > width:
+                continue
+            if nlen > width:
+                continue
 
             distance = self.distance * 1
-            mtop     = 2
+            mtop = 2
 
             delta = start_y + i - distance
             mleft = int((width - (tlen * (CHAR_WIDTH - -1))) / 2)
-            if(delta > stop_x):
-                #pyxel.text(mleft, delta, title, WHITE)
+            if delta > stop_x:
+                # pyxel.text(mleft, delta, title, WHITE)
                 self.font["white8"].pmove_abs(title, mleft, delta)
             i += CHAR_HEIGHT + mtop
-            #print(title, ":", mleft, ":",  tlen, ":",  mleft + mleft + (tlen * (CHAR_WIDTH - 1)))
+            # print(title, ":", mleft, ":",  tlen, ":",  mleft + mleft + (tlen * (CHAR_WIDTH - 1)))
 
             delta = start_y + i - distance
-            #mleft = int((width - (nlen * (CHAR_WIDTH - -1))) / 2)
+            # mleft = int((width - (nlen * (CHAR_WIDTH - -1))) / 2)
             mleft = int((width - (nlen * (self.font["pixelmplus10white"].get_width() - 0))) / 2)
             if(delta > stop_x):
-                #pyxel.text(mleft, delta, name, WHITE)
+                # pyxel.text(mleft, delta, name, WHITE)
                 self.font["pixelmplus10white"].pmove_abs(name, mleft, delta)
-            #i += CHAR_HEIGHT + CHAR_HEIGHT + mtop
+            # i += CHAR_HEIGHT + CHAR_HEIGHT + mtop
             i += self.font["pixelmplus10white"].get_height() + self.font["pixelmplus10white"].get_height() + mtop
-            #print(name, ":", mleft, ":",  nlen, ":",  mleft + mleft + (nlen * (CHAR_WIDTH - 1)))
+            # print(name, ":", mleft, ":",  nlen, ":",  mleft + mleft + (nlen * (CHAR_WIDTH - 1)))
 
             delta = start_y + i - distance
-            if(delta < 1):
+            if delta < 1:
                 delta = 0
         
         self.icon["bt2019"].pmove_abs(0, delta)
-        #Thank you for giving us a precious opportunity.
-        if(delta < 1):
+        # Thank you for giving us a precious opportunity.
+        if delta < 1:
             pyxel.text(32, 136, "Thank you for giving us a precious opportunity.", PINK)
+
 
 app = App()
 
-
-
-if(app.selected_app == 0):
+if app.selected_app == 0:
     print("1vana")
     from app1vana.app import App1vana
     App1vana(args.log_time)
-elif(app.selected_app == 1):
+elif app.selected_app == 1:
     print("2vana")
     from app2vana.app import App2vana
     from app2vana.util import Utility
     utility = Utility()
     App2vana(utility)
 
-
-
-
 foo = App2()
-
-
-
