@@ -73,7 +73,7 @@ class Parser:
         with codecs.open(self.converted_log_path, mode='a', encoding='utf-8') as fout:
             parsed_logs = []
             for log in all_logs:
-                fire_flag = False
+                fire_list = []
                 phase = re.findall(self.phase_regex, log)
                 attack = re.findall(self.action_regex, log)
                 date = re.findall(self.date_regex, log)
@@ -84,9 +84,8 @@ class Parser:
                 if len(date) != 0 and len(phase) != 0 and len(attack) != 0 and len(note) != 0 and len(src) != 0 and len(dest) != 0:
                     if note[0] != '':
                         for fire_regex in self.fire_regex_list:
-                            result = re.findall(fire_regex, note[0])
-                            if len(result) != 0:
-                                fire_flag = True
+                            fire_list = re.findall(fire_regex, note[0])
+                            if len(fire_list) != 0:
                                 break
 
                     date_epoc = datetime.strptime(date[0], self.date_format).timestamp()
@@ -95,7 +94,7 @@ class Parser:
                                    'time': date_epoc,
                                    'from': src[0],
                                    'to': dest[0],
-                                   'note': {'option': note[0], 'CVE': fire_flag}}
+                                   'note': {'option': note[0], 'CVE': fire_list}}
                     self.append_json_to_file(log_content)
 
         return parsed_logs

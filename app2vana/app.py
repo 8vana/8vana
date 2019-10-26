@@ -157,6 +157,7 @@ class App2vana:
             self.utility.print_message(WARNING, 'Too many attackers. Clipped : {} -> {}'.format(len(self.attackers), 4))
             self.attackers = self.attackers[0:4]
         self.Attacker = []
+        self.attacker_action_flag = False
 
         # Read settings of Targets.
         self.targets = config['Target']['targets'].split('@')
@@ -703,8 +704,15 @@ class App2vana:
                                                          log_info['attack'],
                                                          log_info['to'])
 
+                # Check attacker's action flag.
+                if self.attacker_action_flag:
+                    break
+
                 # Shoot bullet.
                 if action_idx == 0:
+                    # Attacker's action flag on.
+                    self.attacker_action_flag = True
+
                     wait_framecount = 0.5
                     self.Attacker[a_idx].wait_framecount = wait_framecount
                     self.Attacker[a_idx].update(x=-8, u=40, w=8,
@@ -724,6 +732,9 @@ class App2vana:
                     self.Bullet.append(new_bullet)
                 # Shoot laser.
                 elif action_idx == 1:
+                    # Attacker's action flag on.
+                    self.attacker_action_flag = True
+
                     wait_framecount = 1.0
                     self.Attacker[a_idx].wait_framecount = wait_framecount
                     self.Attacker[a_idx].update(u=168,
@@ -747,6 +758,9 @@ class App2vana:
                     self.Laser.append(new_laser)
                 # Shoot machine gun.
                 elif action_idx == 2:
+                    # Attacker's action flag on.
+                    self.attacker_action_flag = True
+
                     wait_framecount = 0.5
                     self.Attacker[a_idx].wait_framecount = wait_framecount
                     self.Attacker[a_idx].update(u=88,
@@ -755,11 +769,13 @@ class App2vana:
                     self.DisplayText.push(msg, self.utility.color_7)
                     self.Target[t_idx].origin_framecount = pyxel.frame_count
                     self.Target[t_idx].wait_framecount = wait_framecount
-                    self.Target[t_idx].update(x=-1,
-                                              status=self.utility.status_attack_sub,
+                    self.Target[t_idx].update(status=self.utility.status_attack_sub,
                                               text_color=self.utility.color_10)
                 # Execute probe.
                 elif action_idx == 3:
+                    # Attacker's action flag on.
+                    self.attacker_action_flag = True
+
                     wait_framecount = 1.5
                     self.Attacker[a_idx].wait_framecount = wait_framecount
                     self.Attacker[a_idx].update(u=128,
@@ -826,10 +842,13 @@ class App2vana:
 
         # Laser animation.
         laser_count = len(self.Laser)
-        for idx in range(laser_count):
-            drawing_fc = self.Laser[idx].origin_framecount + self.utility.wait_framecount(self.Laser[idx].wait_framecount)
-            if drawing_fc < pyxel.frame_count:
-                del self.Laser[idx]
+        try:
+            for idx in range(laser_count):
+                drawing_fc = self.Laser[idx].origin_framecount + self.utility.wait_framecount(self.Laser[idx].wait_framecount)
+                if drawing_fc < pyxel.frame_count:
+                    del self.Laser[idx]
+        except Exception as e:
+            print('{}'.format(e.args))
 
         # Reset animation for Attackers.
         for attacker in self.Attacker:
@@ -854,6 +873,9 @@ class App2vana:
                 attacker.origin_framecount = 0
                 attacker.wait_framecount = 0.0
 
+                # Attacker's action flag off.
+                self.attacker_action_flag = False
+
         # Reset animation for Targets.
         for target in self.Target:
             drawing_fc = target.origin_framecount + self.utility.wait_framecount(target.wait_framecount)
@@ -870,7 +892,7 @@ class App2vana:
                     self.DisplayText.push(msg, self.utility.color_14)
                 # Shoot machine gun.
                 elif target.status == self.utility.status_attack_sub:
-                    target.update(x=1, status=self.utility.status_normal, text_color=self.utility.color_7)
+                    target.update(status=self.utility.status_normal, text_color=self.utility.color_7)
                     msg = 'The {} is slightly damaged.'.format(target.hostname)
                     self.DisplayText.push(msg, self.utility.color_11)
                 # Probe.

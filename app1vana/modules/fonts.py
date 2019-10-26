@@ -6,14 +6,14 @@ import os
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
-import util
+from util import Util
 from actor import Actor
 
 
 DEFAULT_WIN_WIDTH  = 255
 DEFAULT_WIN_HTIGHT = 255
 
-util = util.Util()
+util = Util()
 
 class Fonts(Actor):
     def __init__(self, x=0, y=0, ibi=0, ibp = [0,0], w=32, h=32, ww=DEFAULT_WIN_WIDTH, wh=DEFAULT_WIN_HTIGHT, ib=""):
@@ -94,8 +94,13 @@ class Fonts(Actor):
         #util.chardump(self.char["0"], self.char_width)
         return len(self.char)
 
+    def get_width(self):
+        return self.char_width
+    
+    def get_height(self):
+        return self.char_height
 
-    def puts(self, string="", ratio=1):
+    def puts(self, string="", ratio=1, mode=0):
         """
         文字列を指定済みの座標に表示する
         """
@@ -106,14 +111,14 @@ class Fonts(Actor):
                 if(self.char.get(c) == None):
                     util.logger("fonts:puts:invalid charactor:" + c, "!")
                 else:   
-                    if(self.putchar(c, i, ratio) == False):
+                    if(self.putchar(c, i, ratio, mode) == False):
                         util.logger("Fonts:puts:failed:" + c, "!")
             i += 1
 
         return i
 
 
-    def putchar(self, c="", offset=0, ratio=1):
+    def putchar(self, c="", offset=0, ratio=1, mode=0):
         """
         文字を指定済みの座標に表示する
         """
@@ -136,8 +141,10 @@ class Fonts(Actor):
         if(ratio != 1):
             char_width  = self.char_width  * ratio
             char_height = self.char_height * ratio
-            pixmap = self.update_scale(pixmap, ratio)
-            #pixmap = self.update_scale2(pixmap, ratio)
+            if(mode == 0):
+                pixmap = self.update_scale(pixmap, ratio)
+            else:
+                pixmap = self.update_scale2(pixmap, ratio)
 
         for color in pixmap:
             p = pix_count % (char_width) # pix_map上のx座標
@@ -215,47 +222,47 @@ class Fonts(Actor):
         return new_pixmap
 
 
-    def pmove(self, string="", x=0, y=0, ratio=1):
+    def pmove(self, string="", x=0, y=0, ratio=1, mode=0):
         """
         アクターの座標を相対値でx,yの変更をして表示する
         """
         self.move(self.position_x + x, self.position_y + y)
-        self.puts(string, ratio)
+        self.puts(string, ratio, mode)
 
-    def pmove_x(self, string="", x=0, ratio=1):
+    def pmove_x(self, string="", x=0, ratio=1, mode=0):
         """
         アクターの座標を相対値でxのみ変更して表示する
         """
         self.move_x(self.position_x + x)
-        self.puts(string, ratio)
+        self.puts(string, ratio, mode)
 
-    def pmove_y(self, string="", y=0, ratio=1):
+    def pmove_y(self, string="", y=0, ratio=1, mode=0):
         """
         アクターの座標を相対値でyのみ変更して表示する
         """
         self.move_y(self.position_y + y)
-        self.puts(string, ratio)
+        self.puts(string, ratio, mode)
 
-    def pmove_abs(self, string="", x=0, y=0, ratio=1):
+    def pmove_abs(self, string="", x=0, y=0, ratio=1, mode=0):
         """
         アクターの座標をx,yで変更して表示する
         """
         self.move(x, y)
-        self.puts(string, ratio)
+        self.puts(string, ratio, mode)
 
-    def pmove_x_abs(self, string="", x=0, ratio=1):
+    def pmove_x_abs(self, string="", x=0, ratio=1, mode=0):
         """
         アクターの座標をxのみ変更して表示する
         """
         self.move_x(x)
-        self.puts(string, ratio)
+        self.puts(string, ratio, mode)
 
-    def pmove_y_abs(self, string="", y=0, ratio=1):
+    def pmove_y_abs(self, string="", y=0, ratio=1, mode=0):
         """
         アクターの座標をyのみ変更して表示する
         """
         self.move_y(y)
-        self.puts(string, ratio)
+        self.puts(string, ratio, mode)
 
 
 

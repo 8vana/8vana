@@ -45,7 +45,7 @@ TIME_AREA_Y          = 245
 # デフォルトの 30fps のときに FRAME_SECOND を 30 に設定すると実時間と同じスピードで描画される
 # つまり、同一条件のときに3を設定すると10倍のスピードで時間が進むことになる
 # FRAME_SECOND_REAL は、fpsの設定に合わせて指定すること。※差分があると正しく1秒を検出できなくなる。
-FRAME_SECOND         = 3
+FRAME_SECOND         = 30
 FRAME_SECOND_REAL    = 30
 
 # 描画するログの範囲を指定

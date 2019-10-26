@@ -93,12 +93,13 @@ class App１vana:
                 print("[option]log_time: " + str(args.log_time))
                 if(args.log_time != False or log_time != False):
                     self.time_begin = self.log[0]["time"] - env.VISUALIZE_TIME_RANGE - env.VISUALIZE_TIME_WAIT
-                else:
-                    now = datetime.datetime.now()
-                    epoch = int(now.timestamp())
-                    self.time_begin = epoch
 
-                print("[%s] %s, hash: %s\n" % (str(self.time_begin), "log update", self.log_hash))
+        if(self.time_begin == 0):
+            now = datetime.datetime.now()
+            epoch = int(now.timestamp())
+            self.time_begin = epoch
+
+        #print("[%s] %s, hash: %s\n" % (str(self.time_begin), "log update", self.log_hash))
         
         print(self.dir)
         pyxel.image(0).load(0, 0, self.dir + "images/zei255-red.png")
@@ -270,12 +271,36 @@ class App１vana:
             self.netmap_att["list_obj_maps"].append(
                 [num, x, y, x + env.NETMAP_OBJ_WIDTH, y + env.NETMAP_OBJ_HEIGHT, line_color, bg_color, font_color])
 
+        ## 20191024
+        self.read_start_byte = 0
+
         # draw mouse cursor
         pyxel.mouse(True)
 
         pyxel.run(self.update, self.draw)
 
-
+    ## 仮のコード（20191024
+    def watch(self, read_start_byte, env):
+        # Check updated date of target log.
+        if os.path.exists(self.dir + env.INPUT_LOG):
+            # Read log.
+            with open(self.dir + env.INPUT_LOG, mode='r', encoding='utf-8') as fin:
+                fin.seek(read_start_byte)
+                raw_content = fin.read()
+                raw_content_len = len(raw_content)
+                print("%s" % (raw_content))
+                if raw_content == '':
+                    return []
+                elif(raw_content.startswith(',')):
+                    raw_content = raw_content[:0] + '[' + raw_content[1:]
+                elif(raw_content.startswith('[') == False):
+                    raw_content = '[' + raw_content
+                self.read_start_byte += raw_content_len
+                print("[%s] %s" % (read_start_byte, raw_content))
+                content = json.loads(raw_content)
+            return content
+        else:
+            return []
 
     def update(self):
         self.netmap_att["now"] = self.get_now()
@@ -299,20 +324,24 @@ class App１vana:
             if(os.path.exists(self.log_path)):
                 current_log_hash = self.log_hash
                 self.log_hash    = digest.file_hash(self.log_path)
-                print("[%s] %s, hash: %s, %s" % (str(self.get_now()), "begin log update process", current_log_hash, self.log_hash))
-                if(current_log_hash == self.log_hash):
-                    with open(self.dir + env.INPUT_LOG, 'r') as json_file :
-                        self.log = json.load(json_file)
-                print("[%s] %s, hash: %s, %s" % (str(self.get_now()), "end log update process", current_log_hash, self.log_hash))
+                print("[%s] %s" % (str(self.get_now()), "begin log watch process"))
+                if(current_log_hash != self.log_hash):
+                    print("[%s] %s, hash: %s, %s" % (str(self.get_now()), "begin log update process", current_log_hash, self.log_hash))
+                    self.log = self.watch(self.read_start_byte, env)
+                    print('[DEBUG] {}'.format(self.log))
+                    #with open(self.dir + env.INPUT_LOG, 'r') as json_file :
+                    #    self.log = json.load(json_file)
+                    print("[%s] %s, hash: %s, %s" % (str(self.get_now()), "end log update process", current_log_hash, self.log_hash))
 
         # ログの情報を格納する
         self.targets = []
         for row in self.log:
             now = self.get_now()
-            #print("[%s]:%s:%s" % (str("{:.1f}".format(now)), row["time"], float(row["time"]) - now))
+            #print("[time_begin:%s][get_now:%s]:row[time]:%s, row[time]-now:%s, now - vt: %s, now + vt: %s" % (self.time_begin, str("{:.1f}".format(now)), row["time"], float(row["time"]) - now, now - env.VISUALIZE_TIME_RANGE, now + env.VISUALIZE_TIME_RANGE))
             if(
-                row["time"] >= now and row["time"] > now - env.VISUALIZE_TIME_RANGE and
-                row["time"] >= now and row["time"] < now + env.VISUALIZE_TIME_RANGE
+                #row["time"] >= now and
+                row["time"] > now - env.VISUALIZE_TIME_RANGE and
+                row["time"] < now + env.VISUALIZE_TIME_RANGE
             ):
 
                 # 現在時間+描画範囲の秒数以内

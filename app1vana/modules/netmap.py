@@ -221,17 +221,18 @@ class Netmap:
             (line_color, bg_color, font_color) = (obj_map[5], obj_map[6], obj_map[7])
 
             # ノードのイベント発生状態からバックグラウンドカラーを選択する
-            delta = att["now"] - event_time
-            if(   delta >= (0 - self.timerange) and delta <= 60 * 1):
-                bg_color = self.l1
-            elif( delta >  60 * 1  and delta <= 60 * 5):
-                bg_color = self.l2
-            elif( delta >  60 * 5  and delta <= 60 * 10):
-                bg_color = self.l3
-            elif( delta >  60 * 10 and delta <= 60 * 30):
-                bg_color = self.l4
-            elif( delta >  60 * 30 and delta <= 60 * 60):
-                bg_color = self.l5
+            if (event_time > 0):
+                delta = att["now"] - event_time
+                if (delta >= (0 - self.timerange) and delta <= 60 * 1):
+                    bg_color = self.l1
+                elif (delta > 60 * 1 and delta <= 60 * 5):
+                    bg_color = self.l2
+                elif (delta > 60 * 5 and delta <= 60 * 10):
+                    bg_color = self.l3
+                elif (delta > 60 * 10 and delta <= 60 * 30):
+                    bg_color = self.l4
+                elif (delta > 60 * 30 and delta <= 60 * 60):
+                    bg_color = self.l5
             
 
             if(len(obj_list) > 0):
