@@ -355,7 +355,7 @@ class App１vana:
                     row["draw"] = True
                 else:
                     row["draw"] = False
-                    break
+                    continue
 
                 # ノードの状態を更新する
                 if(ip[0] not in self.node_status):
