@@ -59,7 +59,7 @@ parser.add_argument('-l','--log_time',
     action="store_true")
 args = parser.parse_args()
 
-class App１vana:
+class App1vana:
     def __init__(self, log_time=False):
         self.file_name = os.path.basename(__file__)
         self.full_path = os.path.dirname(os.path.abspath(__file__))
