@@ -175,8 +175,7 @@ class App2vana:
             self.watch_period = 1
         converted_log_dir = os.path.join(self.root_path, config['LogParser']['converted_log_path'])
         self.converted_log_path = os.path.join(converted_log_dir, config['LogParser']['converted_log_file'])
-        self.read_start_byte = 0
-        self.last_log_loading_time = 0
+        self.last_read_time = 0.0
 
         # Create Display Text instance.
         self.DisplayText = DisplayText()
@@ -217,7 +216,6 @@ class App2vana:
 
         # Get timestamp.
         self.timestamp = time.mktime(datetime.datetime.now().utctimetuple())
-        self.read_start_byte = 0
 
         # Run.
         pyxel.run(self.update, self.draw)
@@ -599,19 +597,22 @@ class App2vana:
         return get_index
 
     # Monitor log files.
-    def watch(self, read_start_byte):
+    def watch(self, last_read_time):
         # Check updated date of target log.
         if os.path.exists(self.converted_log_path):
             # Read log.
             with codecs.open(self.converted_log_path, mode='r', encoding='utf-8') as fin:
-                fin.seek(read_start_byte)
-                raw_content = fin.read()
+                raw_content = json.load(fin)
+                content = []
+                for log in raw_content:
+                    if last_read_time < log['time']:
+                        # Update last read time.
+                        self.last_read_time = log['time']
+
+                        # Get new logs.
+                        content.append(log)
                 if raw_content == '':
                     return []
-                elif raw_content.startswith(','):
-                    raw_content = raw_content[:0] + '[' + raw_content[1:]
-                self.read_start_byte += len(raw_content)
-                content = json.loads(raw_content)
             return content
         else:
             return []
@@ -666,7 +667,8 @@ class App2vana:
         # Control Actor's action.
         log_contents = ''
         if pyxel.frame_count % self.utility.wait_framecount(self.watch_period) == 0:
-            log_contents = self.watch(self.read_start_byte)
+            # Watch log.
+            log_contents = self.watch(self.last_read_time)
 
             # Get event information.
             for log_info in log_contents:
@@ -698,7 +700,8 @@ class App2vana:
                 # Attacker's attacking animation.
                 self.Attacker[a_idx].origin_framecount = pyxel.frame_count
                 action_idx = 0
-                if log_info['phase'] == 'Attack':
+
+                if str(log_info['phase']).lower() == 'attack':
                     action_idx = random.randint(0, 2)
                 else:
                     action_idx = 3
